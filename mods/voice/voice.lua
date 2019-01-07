@@ -155,7 +155,7 @@ function voice.activate_internal()
 			give_to_singleplayer = true
 		})
 		
-		minetest.register_on_chat_message(voice.on_chat_message)
+		--minetest.register_on_chat_message(voice.on_chat_message)
 		
 		voice.register_chatcommand("t", "talk", "Talk", voice.talk_parameters)
 		voice.register_chatcommand("s", "shout", "Shout", voice.shout_parameters)
