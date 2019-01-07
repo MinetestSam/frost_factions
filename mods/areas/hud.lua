@@ -1,7 +1,7 @@
 -- This is inspired by the landrush mod by Bremaweb
 
 areas.hud = {}
-
+--[[
 minetest.register_globalstep(function(dtime)
 	for _, player in pairs(minetest.get_connected_players()) do
 		local name = player:get_player_name()
@@ -49,7 +49,7 @@ minetest.register_globalstep(function(dtime)
 		end
 	end
 end)
-
+--]]
 minetest.register_on_leaveplayer(function(player)
 	areas.hud[player:get_player_name()] = nil
 end)
