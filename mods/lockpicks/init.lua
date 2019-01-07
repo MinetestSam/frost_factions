@@ -65,30 +65,10 @@ end
 --locked node definitions
 
 --load technic chests
-modpath=minetest.get_modpath("lockpicks")
-
--- chests
-if (minetest.get_modpath("technic")) then
-	dofile(modpath.."/chest_commons.lua")
-	dofile(modpath.."/iron_chest.lua")
-	dofile(modpath.."/copper_chest.lua")
-	dofile(modpath.."/silver_chest.lua")
-	dofile(modpath.."/gold_chest.lua")
-	dofile(modpath.."/mithril_chest.lua")
-end
+modpath = minetest.get_modpath("lockpicks")
 
 --redefine original locked chest
 dofile(modpath.."/default_chest.lua")
-
---redefine the locks mod's shared chest
-if (minetest.get_modpath("locks")) then
-	dofile(modpath.."/locks.lua")
-end
-
---if mesecons installed, define trap chests and mesecons chests
-if (minetest.get_modpath("mesecons")) then
-	dofile(modpath.."/trap_chest.lua")
-end
 
 --pick recipe definitions
 minetest.register_craft({
