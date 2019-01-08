@@ -23,65 +23,66 @@ local waiting_list = {}
 	}
 ]]
 
-minetest.register_globalstep(function(dtime)   
-	count = count + dtime
+extended_api.register_step(function(dtime)
+	if count < 3 then
+		count = count + dtime
+	else
+		count = 0
+		for k, v in pairs(waiting_list) do
+			if v.player and v.player:is_player() then
+				local pos = get_surface_pos(v.pos)
+				if pos then
+					v.obj:setpos(pos)
+					minetest.after(0.2, function(p, o)
+						p:set_detach()
+						o:remove()
+					end, v.player, v.obj)
+					waiting_list[k] = nil
+				elseif not v.notified then
+					v.notified = true
+					minetest.chat_send_player(k, "Sorry, we have not found a free place yet. Please be patient.")
+				end
+			else
+				v.obj:remove()
+				waiting_list[k] = nil
+			end
+		end
+	end
+end)
+
+extended_api.register_playerloop(function(dtime, i, player)   
 	if count < 3 then
 		return
 	end
-	count = 0
 	
-	for k, v in pairs(waiting_list) do
-		if v.player and v.player:is_player() then
-			local pos = get_surface_pos(v.pos)
-			if pos then
-				v.obj:setpos(pos)
-				minetest.after(0.2, function(p, o)
-					p:set_detach()
-					o:remove()
-				end, v.player, v.obj)
-				waiting_list[k] = nil
-			elseif not v.notified then
-				v.notified = true
-				minetest.chat_send_player(k, "Sorry, we have not found a free place yet. Please be patient.")
-			end
-		else
-			v.obj:remove()
-			waiting_list[k] = nil
-		end
-	end
-
 	local newedge = edge - 5
-	-- Check if the players are near the edge and teleport them
-	local players = minetest.get_connected_players()
-	for i, player in ipairs(players) do
-		local name = player:get_player_name()
-		if not waiting_list[name] then
-			local pos = vector.round(player:getpos())
-			local newpos = nil
-			if pos.x >= edge then
-				newpos = {x = -newedge, y = 10, z = pos.z}
-			elseif pos.x <= -edge then
-				newpos = {x = newedge, y = 10, z = pos.z}
-			end
-			 
-			if pos.z >= edge then
-				newpos = {x = pos.x, y = 10, z = -newedge}
-			elseif pos.z <= -edge then
-				newpos = {x = pos.x, y = 10, z = newedge}
-			end
-			
-			-- Teleport the player
-			if newpos then
-				minetest.chat_send_player(name, "Please wait a few seconds. We will teleport you soon.")
-				local obj = minetest.add_entity(newpos, "worldedge:lock")
-				player:set_attach(obj, "", {x=0, y=0, z=0}, {x=0, y=0, z=0})
-				waiting_list[name] = {
-					player = player,
-					pos = newpos,
-					obj = obj
-				}
-				obj:setpos(newpos)
-			end
+	local name = player:get_player_name()
+	if not waiting_list[name] then
+		local pos = vector.round(player:getpos())
+		local newpos = nil
+		if pos.x >= edge then
+			newpos = {x = -newedge, y = 10, z = pos.z}
+		elseif pos.x <= -edge then
+			newpos = {x = newedge, y = 10, z = pos.z}
+		end
+		 
+		if pos.z >= edge then
+			newpos = {x = pos.x, y = 10, z = -newedge}
+		elseif pos.z <= -edge then
+			newpos = {x = pos.x, y = 10, z = newedge}
+		end
+		
+		-- Teleport the player
+		if newpos then
+			minetest.chat_send_player(name, "Please wait a few seconds. We will teleport you soon.")
+			local obj = minetest.add_entity(newpos, "worldedge:lock")
+			player:set_attach(obj, "", {x=0, y=0, z=0}, {x=0, y=0, z=0})
+			waiting_list[name] = {
+				player = player,
+				pos = newpos,
+				obj = obj
+			}
+			obj:setpos(newpos)
 		end
 	end
 end)

@@ -4,3 +4,4 @@ sfinv?
 intllib?
 datastorage?
 farming?
+extended_api

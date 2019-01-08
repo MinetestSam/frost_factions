@@ -36,28 +36,26 @@ minetest.register_on_leaveplayer(function(player)
 	controls.players[name] = nil
 end)
 
-minetest.register_globalstep(function(dtime)
-	for _, player in pairs(minetest.get_connected_players()) do
-		local player_name = player:get_player_name()
-		local player_controls = player:get_player_control()
-		for cname, cbool in pairs(player_controls) do
-			--Press a key
-			if cbool==true and controls.players[player_name][cname][1]==false then
-				for _, func in pairs(controls.registered_on_press) do
-					func(player, cname)
-				end
-				controls.players[player_name][cname] = {true, os.clock()}
-			elseif cbool==true and controls.players[player_name][cname][1]==true then
-				for _, func in pairs(controls.registered_on_hold) do
-					func(player, cname, os.clock()-controls.players[player_name][cname][2])
-				end
-			--Release a key
-			elseif cbool==false and controls.players[player_name][cname][1]==true then
-				for _, func in pairs(controls.registered_on_release) do
-					func(player, cname, os.clock()-controls.players[player_name][cname][2])
-				end
-				controls.players[player_name][cname] = {false}
+extended_api.register_playerloop(function(dtime, _, player)
+	local player_name = player:get_player_name()
+	local player_controls = player:get_player_control()
+	for cname, cbool in pairs(player_controls) do
+		--Press a key
+		if cbool==true and controls.players[player_name][cname][1]==false then
+			for _, func in pairs(controls.registered_on_press) do
+				func(player, cname)
 			end
+			controls.players[player_name][cname] = {true, os.clock()}
+		elseif cbool==true and controls.players[player_name][cname][1]==true then
+			for _, func in pairs(controls.registered_on_hold) do
+				func(player, cname, os.clock()-controls.players[player_name][cname][2])
+			end
+		--Release a key
+		elseif cbool==false and controls.players[player_name][cname][1]==true then
+			for _, func in pairs(controls.registered_on_release) do
+				func(player, cname, os.clock()-controls.players[player_name][cname][2])
+			end
+			controls.players[player_name][cname] = {false}
 		end
 	end
 end)

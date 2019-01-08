@@ -37,7 +37,7 @@ minetest.register_on_leaveplayer(function(player)
 	item_names[player:get_player_name()] = nil
 end)
 
-minetest.register_globalstep(function(dtime)
+extended_api.register_playerloop(function(dtime, _, player)
 	for _, player in pairs(minetest.get_connected_players()) do
 		local data = item_names[player:get_player_name()]
 		if not data or not data.hud then

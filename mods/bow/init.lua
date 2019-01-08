@@ -166,30 +166,28 @@ controls.register_on_hold(function(player, key, time)
 	player:set_wielded_item(wielditem)
 end)
 
-minetest.register_globalstep(function(dtime)
-	for _, player in pairs(minetest.get_connected_players()) do
-		local wielditem = player:get_wielded_item()
-		if wielditem:get_name()=="bow:wood_bow_dropped" then
-			wielditem:set_name("bow:wood_bow")
-			player:set_wielded_item(wielditem)
-		end
-		local controls = player:get_player_control()
-		timer = timer+dtime
-		local inv = minetest.get_inventory({type="player", name=player:get_player_name()})
-		if bow_load[player:get_player_name()] and (wielditem:get_name()~="bow:wood_bow_1" and wielditem:get_name()~="bow:wood_bow_2" and wielditem:get_name()~="bow:wood_bow_3") then
-			local list = inv:get_list("main")
-			for place, stack in pairs(list) do
-				if stack:get_name()=="bow:wood_bow_1" or stack:get_name()=="bow:wood_bow_2" or stack:get_name()=="bow:wood_bow_3" then
-					stack:set_name("bow:wood_bow")
-					list[place]=stack
-					break
-				end
+extended_api.register_playerloop(function(dtime, _, player)
+	local wielditem = player:get_wielded_item()
+	if wielditem:get_name()=="bow:wood_bow_dropped" then
+		wielditem:set_name("bow:wood_bow")
+		player:set_wielded_item(wielditem)
+	end
+	local controls = player:get_player_control()
+	timer = timer+dtime
+	local inv = minetest.get_inventory({type="player", name=player:get_player_name()})
+	if bow_load[player:get_player_name()] and (wielditem:get_name()~="bow:wood_bow_1" and wielditem:get_name()~="bow:wood_bow_2" and wielditem:get_name()~="bow:wood_bow_3") then
+		local list = inv:get_list("main")
+		for place, stack in pairs(list) do
+			if stack:get_name()=="bow:wood_bow_1" or stack:get_name()=="bow:wood_bow_2" or stack:get_name()=="bow:wood_bow_3" then
+				stack:set_name("bow:wood_bow")
+				list[place]=stack
+				break
 			end
-			inv:set_list("main", list)
-			player:set_physics_override({speed=1})
-			player:set_eye_offset({x=0,y=0,z=0},{x=0,y=0,z=0})
-			bow_load[player:get_player_name()]=false
 		end
+		inv:set_list("main", list)
+		player:set_physics_override({speed=1})
+		player:set_eye_offset({x=0,y=0,z=0},{x=0,y=0,z=0})
+		bow_load[player:get_player_name()]=false
 	end
 end)
 

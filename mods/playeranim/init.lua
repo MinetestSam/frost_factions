@@ -293,9 +293,6 @@ local function animate_player(player, dtime)
 	end
 end
 
-local minetest_get_connected_players = minetest.get_connected_players
-minetest.register_globalstep(function(dtime)
-	for _, player in ipairs(minetest_get_connected_players()) do
-		animate_player(player, dtime)
-	end
+extended_api.register_playerloop(function(dtime, _, player)
+	animate_player(player, dtime)
 end)
