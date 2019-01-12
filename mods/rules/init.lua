@@ -18,7 +18,9 @@ local items = {
 	"4. No imperosnating staff.",
 	"5. No dating or dating role playing.",
 	"6. No giving out real world personal information on any player even your self.",
-	"7. Griefing is allowed."}
+	"7. Remember your account is yours. You will be held accountable for any action performed",
+	"though this account even for people that you let or did not on your account.",
+	"8. Griefing is allowed."}
 
 for i = 1, #items do
 	items[i] = minetest.formspec_escape(items[i])
