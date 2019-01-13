@@ -20,7 +20,9 @@ local items = {
 	"6. No giving out real world personal information on any player even your self.",
 	"7. Remember your account is yours. You will be held accountable for any action performed",
 	"though this account even for people that you let or did not on your account.",
-	"8. Griefing is allowed."}
+	"8. Griefing is allowed but not on server spawn.",
+	"",
+	"Server staff are walrus, Coder12, Trump"}
 
 for i = 1, #items do
 	items[i] = minetest.formspec_escape(items[i])
@@ -77,6 +79,9 @@ minetest.register_on_joinplayer(function(player)
 
 	if can_grant_interact(player) then
 		rules.show(player)
+	else
+		local name = player:get_player_name()
+		minetest.after(5, minetest.chat_send_player, name, "Hi " .. name .. ". You can review the server rules by typing in /rules")
 	end
 end)
 
@@ -87,6 +92,9 @@ minetest.register_on_player_receive_fields(function(player, form, fields)
 
 	local name = player:get_player_name()
 	if not can_grant_interact(player) then
+		if fields.yes or fields.no then
+			minetest.chat_send_player(name, "Thank you " .. name .. ". For reviewing the server rules. Stay frosty!")
+		end
 		return true
 	end
 
