@@ -6,6 +6,7 @@ end
 
 local tip = {}
 
+spawnpos = minetest.deserialize(storage:get_string("spawn"))
 
 minetest.register_privilege("spawn_admin", {
 	description = "Can use /setspawn",
@@ -35,6 +36,7 @@ minetest.register_chatcommand("setspawn", {
 		name = name or "" -- fallback to blank name if nil
 		local player = minetest.get_player_by_name(name)
 		local pos = player:get_pos()
+		spawnpos = pos
 		storage:set_string("spawn", minetest.serialize(pos))
 		return true, "Spawn set!"
 	end,

@@ -211,6 +211,12 @@ factions.register_command ("claim", {
 	global_privileges = def_global_privileges,
     on_success = function(player, faction, pos, parcelpos, args)
         local can_claim = faction:can_claim_parcel(parcelpos)
+		
+		local p = parcelpos
+		local x = tonumber(p:sub(0, p:find(",") - 1))
+		local z = tonumber(p:sub(p:find(",") + 1))
+		local limit = spawnpos
+		
         if can_claim then
             minetest.chat_send_player(player, "Claming parcel "..parcelpos)
             faction:claim_parcel(parcelpos)
@@ -226,6 +232,9 @@ factions.register_command ("claim", {
             elseif faction.power <= factions_config.power_per_parcel then
                 send_error(player, "Not enough power.")
                 return false
+			elseif x < limit.x + 150 and x > limit.x - 150 and z < limit.z + 150 and z > limit.z - 150 then
+				send_error(player, "Too close to spawn you can only claim land 150 blocks away.")
+				return false
             else
                 send_error(player, "Your faction cannot claim any (more) parcel(s).")
                 return false
