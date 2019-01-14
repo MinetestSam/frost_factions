@@ -373,15 +373,6 @@ local parcel_size = factions_config.parcel_size
 --! @return whether this faction can claim a parcelpos
 function factions.Faction.can_claim_parcel(self, parcelpos)
     local fac = factions.parcels[parcelpos]
-	
-	local p = parcelpos
-	local x = tonumber(p:sub(0, p:find(",") - 1))
-	local z = tonumber(p:sub(p:find(",") + 1))
-	local limit = spawnpos
-	
-	if x > limit.x - 150 and x < limit.x + 150 and z > limit.z - 150 and z < limit.z + 150	then
-		return false
-	end
     if fac then
         if factions.factions[fac].power < 0. and self.power >= factions_config.power_per_parcel and not self.allies[factions.factions[fac].name] and not self.neutral[factions.factions[fac].name] then
             return true
