@@ -21,7 +21,9 @@ minetest.register_chatcommand("spawn", {
 		end
 		local player = minetest.get_player_by_name(name)
 		minetest.after(5, function(player) 
-			player:set_pos(minetest.deserialize(storage:get_string("spawn"))) 
+			if player and tip[name] then
+				player:set_pos(spawnpos) 
+			end
 			tip[name] = nil
 		end, player)
 		tip[name] = true
@@ -41,3 +43,10 @@ minetest.register_chatcommand("setspawn", {
 		return true, "Spawn set!"
 	end,
 })
+
+minetest.register_on_leaveplayer(
+	function(player)
+		local name = player:get_player_name()
+		tip[name] = nil
+	end
+)
