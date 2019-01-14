@@ -20,12 +20,12 @@ minetest.register_chatcommand("spawn", {
 			return false, "Your already being teleported!"
 		end
 		local player = minetest.get_player_by_name(name)
-		minetest.after(5, function(player) 
+		minetest.after(5, function(player, name) 
 			if player and tip[name] then
 				player:set_pos(spawnpos) 
 			end
 			tip[name] = nil
-		end, player)
+		end, player, name)
 		tip[name] = true
 		return true, "You will be teleported in five seconds."
 	end,
