@@ -137,7 +137,8 @@ local stamina_timer = 0
 local health_timer = 0
 local action_timer = 0
 
-local function stamina_globaltimer(dtime)
+local function stamina_step()
+	local dtime = 0.5
 	stamina_timer = stamina_timer + dtime
 	health_timer = health_timer + dtime
 	action_timer = action_timer + dtime
@@ -241,6 +242,7 @@ local function stamina_globaltimer(dtime)
 
 		health_timer = 0
 	end
+	minetest.after(0.5, stamina_step)
 end
 
 local function poison_player(ticks, time, elapsed, user)
@@ -363,7 +365,7 @@ if minetest.setting_getbool("enable_damage") and minetest.is_yes(minetest.settin
 		player:set_attribute("stamina:poisoned", "no")
 	end)
 
-	minetest.register_globalstep(stamina_globaltimer)
+	stamina_step()
 
 	minetest.register_on_placenode(function(pos, oldnode, player, ext)
 		exhaust_player(player, STAMINA_EXHAUST_PLACE)
