@@ -1,1 +1,1 @@
-extended_api
+minimal_anticheat
