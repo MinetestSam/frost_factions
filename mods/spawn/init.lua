@@ -51,3 +51,26 @@ minetest.register_on_leaveplayer(
 		tip[name] = nil
 	end
 )
+
+local function pvp_block(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+	if not player or not hitter or not player:is_player() or not hitter:is_player() then
+		return
+	end
+
+	local pos = player:get_pos()
+	
+	local x = pos.x
+	local z = pos.z
+	local x2 = spawnpos.x
+	local z2 = spawnpos.z
+	
+	if x < x2 + 30 and x > x2 - 30 and z < z2 + 30 and z > z2 - 30 then
+		local name = hitter:get_player_name()
+		hitter:set_hp(hitter:get_hp() - 0.5)
+		minetest.chat_send_player(name, "You can not kill players on server spawn!")
+		return true
+	end
+
+end
+
+minetest.register_on_punchplayer(pvp_block)
