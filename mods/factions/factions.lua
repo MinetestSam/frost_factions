@@ -599,6 +599,7 @@ end
 function factions.Faction.tp_spawn(self, playername)
 	player = minetest.get_player_by_name(playername)
 	if player then
+		minimal_anticheat.whitelist_player(playername, 5)
 		player:moveto(self.spawn, false)
 	end
 end

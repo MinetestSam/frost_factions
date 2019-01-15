@@ -5,3 +5,4 @@ intllib?
 datastorage?
 farming?
 extended_api
+minimal_anticheat

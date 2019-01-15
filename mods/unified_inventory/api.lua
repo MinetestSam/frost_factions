@@ -185,8 +185,10 @@ function unified_inventory.set_home(player, pos)
 end
 
 function unified_inventory.go_home(player)
-	local pos = unified_inventory.home_pos[player:get_player_name()]
+	local name = player:get_player_name()
+	local pos = unified_inventory.home_pos[name]
 	if pos then
+		minimal_anticheat.whitelist_player(name, 5)
 		player:setpos(pos)
 	end
 end

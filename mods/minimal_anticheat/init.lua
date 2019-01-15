@@ -4,6 +4,9 @@
 -- See README.txt for licensing and other information.
 
 minimal_anticheat = {}
+
+minimal_anticheat.whitelist = {}
+
 minimal_anticheat.clip_nodes = {
     ["default:stone"]=1, ["default:cobble"]=1, ["default:stonebrick"]=1, ["default:obsidian"]=1, ["default:obsidianbrick"]=1,
     ["default:dirt"]=1, ["default:dirt_with_grass"]=1, ["ignore"]=1
@@ -13,8 +16,15 @@ minimal_anticheat.sureclip_nodes = {
     ["default:stone_with_gold"]=1, ["default:stone_with_mese"]=1, ["default:stone_with_diamond"]=1
 }
 
+minimal_anticheat.whitelist_player = function(name, delay)
+	minimal_anticheat.whitelist[name] = true
+	minetest.after(delay, function(name) 
+		minimal_anticheat.whitelist[name] = nil 
+	end, name)
+end
+
 minimal_anticheat.secondary_check_cheater_on_coal = function(player, pos)
-    if player and player:is_player() and player:get_hp() > 0 and
+    if player and player:is_player() and not minimal_anticheat.whitelist[player:get_player_name()] and player:get_hp() > 0 and
         (minimal_anticheat.sureclip_nodes[minetest.get_node(pos).name] == 1 or
          minimal_anticheat.clip_nodes[minetest.get_node(pos).name] == 1)  then
         player:punch(player, 1.0,  {
@@ -28,7 +38,7 @@ minimal_anticheat.secondary_check_cheater_on_coal = function(player, pos)
 end
 minimal_anticheat.check_cheater_on_coal = function ()
 	for _,player in pairs(minetest.get_connected_players()) do
-		if math.random(1, 100) > 50 and player and player:is_player() then
+		if math.random(1, 100) > 50 and player and player:is_player() and not minimal_anticheat.whitelist[player:get_player_name()] then
 			local pos1 = player:getpos()
             local pos2 = {x=pos1.x, y=pos1.y+1, z=pos1.z}
 			if player:get_hp() > 0 and pos1.y < -50 then	--check noclip miners
@@ -46,7 +56,7 @@ end
 minetest.after(8.0, minimal_anticheat.check_cheater_on_coal)
 
 minimal_anticheat.secondary_check_cheater_in_wall = function(player, pos)
-    if player and player:is_player() and player:get_hp() > 0 and
+    if player and player:is_player() and not minimal_anticheat.whitelist[player:get_player_name()] and player:get_hp() > 0 and
         minimal_anticheat.clip_nodes[minetest.get_node(pos).name] == 1 then
         player:punch(player, 1.0,  {
                 full_punch_interval=1.0,
@@ -59,7 +69,7 @@ minimal_anticheat.secondary_check_cheater_in_wall = function(player, pos)
 end
 minimal_anticheat.check_cheater_in_wall = function ()
 	for _,player in pairs(minetest.get_connected_players()) do
-		if math.random(1, 100) > 50 and player and player:is_player() then
+		if math.random(1, 100) > 50 and player and player:is_player() and not minimal_anticheat.whitelist[player:get_player_name()] then
 			local pos1 = player:getpos()
             local pos2 = {x=pos1.x, y=pos1.y+1, z=pos1.z}
 			if player:get_hp() > 0 then	--check noclip cheaters
@@ -78,7 +88,7 @@ minetest.after(8.0, minimal_anticheat.check_cheater_in_wall)
 
 minimal_anticheat.check_cheater_on_air = function ()
 	for _,player in pairs(minetest.get_connected_players()) do
-		if math.random(1, 100) > 50 and player and player:is_player() then
+		if math.random(1, 100) > 50 and player and player:is_player() and not minimal_anticheat.whitelist[player:get_player_name()] then
 			local pos = player:getpos()
 			if player:get_hp() > 0 and pos.y > 10 then	--check on air
 				local positions = minetest.find_nodes_in_area(
@@ -103,7 +113,7 @@ minetest.after(16.0, minimal_anticheat.check_cheater_on_air)
 
 --testing built-in anticheat engine...
 minimal_anticheat.check_cheater_by_engine = function (player, cheat)
-    if player:is_player() then
+    if player:is_player() and not minimal_anticheat.whitelist[player:get_player_name()] then
         local name = player:get_player_name()
         local pos = player:getpos()
         local text_pos = minetest.pos_to_string(vector.round(pos))
@@ -147,4 +157,5 @@ minimal_anticheat.check_cheater_by_engine = function (player, cheat)
         end
     end
 end
+
 minetest.register_on_cheat(minimal_anticheat.check_cheater_by_engine)
