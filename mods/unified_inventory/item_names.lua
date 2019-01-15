@@ -38,39 +38,37 @@ minetest.register_on_leaveplayer(function(player)
 end)
 
 extended_api.register_playerloop(function(dtime, _, player)
-	for _, player in pairs(minetest.get_connected_players()) do
-		local data = item_names[player:get_player_name()]
-		if not data or not data.hud then
-			data = {} -- Update on next step
-			set_hud(player)
+	local data = item_names[player:get_player_name()]
+	if not data or not data.hud then
+		data = {} -- Update on next step
+		set_hud(player)
+	end
+
+	local index = player:get_wield_index()
+	local stack = player:get_wielded_item()
+	local itemname = stack:get_name()
+
+	if data.hud and data.dtime < dlimit then
+		data.dtime = data.dtime + dtime
+		if data.dtime > dlimit then
+			player:hud_change(data.hud, 'text', "")
 		end
+	end
 
-		local index = player:get_wield_index()
-		local stack = player:get_wielded_item()
-		local itemname = stack:get_name()
+	if data.hud and (itemname ~= data.itemname or index ~= data.index) then
+		data.itemname = itemname
+		data.index = index
+		data.dtime = 0
 
-		if data.hud and data.dtime < dlimit then
-			data.dtime = data.dtime + dtime
-			if data.dtime > dlimit then
-				player:hud_change(data.hud, 'text', "")
-			end
+		local desc = stack.get_meta
+			and stack:get_meta():get_string("description")
+
+		if not desc or desc == "" then
+			-- Try to use default description when none is set in the meta
+			local def = minetest.registered_items[itemname]
+			desc = def and def.description or ""
 		end
-
-		if data.hud and (itemname ~= data.itemname or index ~= data.index) then
-			data.itemname = itemname
-			data.index = index
-			data.dtime = 0
-
-			local desc = stack.get_meta
-				and stack:get_meta():get_string("description")
-
-			if not desc or desc == "" then
-				-- Try to use default description when none is set in the meta
-				local def = minetest.registered_items[itemname]
-				desc = def and def.description or ""
-			end
-			player:hud_change(data.hud, 'text', desc)
-		end
+		player:hud_change(data.hud, 'text', desc)
 	end
 end)
 
