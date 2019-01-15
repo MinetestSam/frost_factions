@@ -107,15 +107,13 @@ file:write(datastr)
 file:close()
 end
 
---economy globalstep
-economy.save_cntdn=10
-minetest.register_globalstep(function(dtime)
-	if economy.save_cntdn<=0 then
-		economy.save()
-		economy.save_cntdn=10 --10 seconds interval!
-	end
-	economy.save_cntdn=economy.save_cntdn-dtime
-end)
+--economy after timer
+local function step()
+	economy.save()
+	minetest.after(10, step)
+end
+
+step()
 
 local svm_cbox = {
 	type = "fixed",
