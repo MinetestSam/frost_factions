@@ -154,6 +154,10 @@ local function hopper_tick(pos)
 	else
 		hopper.send_item_to(pos, destination_pos, destination_node) -- for handling ejection
 	end
+	
+	if inv and not inv:is_empty("main") then
+		return true
+	end
 end
 
 -------------------------------------------------------------------------------------------

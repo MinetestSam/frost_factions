@@ -33,9 +33,17 @@ hopper.get_eject_button_texts = function(pos, loc_X, loc_Y)
 	if minetest.get_meta(pos):get_string("eject") == "true" then
 		eject_button_text = S("Don't\nEject")
 		eject_button_tooltip = S("This hopper is currently set to eject items from its output\neven if there isn't a compatible block positioned to receive it.\nClick this button to disable this feature.")
+		local timer1 = minetest.get_node_timer(pos)
+		if not timer1:is_started() then
+			timer1:start(1.0)
+		end
 	else
 		eject_button_text = S("Eject\nItems")
 		eject_button_tooltip = S("This hopper is currently set to hold on to item if there\nisn't a compatible block positioned to receive it.\nClick this button to have it eject items instead.")
+		local timer1 = minetest.get_node_timer(pos)
+		if not timer1:is_started() then
+			timer1:start(1.0)
+		end
 	end
 	return "button_exit["..loc_X..","..loc_Y..";1,1;eject;"..eject_button_text.."]tooltip[eject;"..eject_button_tooltip.."]"
 end
