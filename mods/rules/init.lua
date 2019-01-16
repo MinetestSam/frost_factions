@@ -71,12 +71,6 @@ minetest.register_chatcommand("rules", {
 })
 
 minetest.register_on_joinplayer(function(player)
-	local privs = minetest.get_player_privs(player:get_player_name())
-	if privs.interact and privs.fly then
-		privs.interact = false
-		minetest.set_player_privs(player:get_player_name(), privs)
-	end
-
 	if can_grant_interact(player) then
 		rules.show(player)
 	else
@@ -94,6 +88,9 @@ minetest.register_on_player_receive_fields(function(player, form, fields)
 	if not can_grant_interact(player) then
 		if fields.yes or fields.no then
 			minetest.chat_send_player(name, "Thank you " .. name .. ". For reviewing the server rules. Stay frosty!")
+			local privs = minetest.get_player_privs(name)
+			privs.interact = true
+			minetest.set_player_privs(name, privs)
 		end
 		return true
 	end
