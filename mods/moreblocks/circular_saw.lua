@@ -131,10 +131,6 @@ function circular_saw:reset(pos)
 	inv:set_list("micro",  {})
 	inv:set_list("output", {})
 	meta:set_int("anz", 0)
-
-	meta:set_string("infotext",
-			S("Circular Saw is empty (owned by %s)")
-			:format(meta:get_string("owner") or ""))
 end
 
 
@@ -189,10 +185,6 @@ function circular_saw:update_inventory(pos, amount)
 				meta:get_int("max_offered")))
 	-- Store how many microblocks are available:
 	meta:set_int("anz", amount)
-
-	meta:set_string("infotext",
-			S("Circular Saw is working on %s (owned by %s)")
-			:format(material, meta:get_string("owner") or ""))
 end
 
 
@@ -426,11 +418,8 @@ minetest.register_node("moreblocks:circular_saw",  {
 	-- Set the owner of this circular saw.
 	after_place_node = function(pos, placer)
 		local meta = minetest.get_meta(pos)
-		local owner = placer and placer:get_player_name() or ""
-		meta:set_string("owner",  owner)
 		meta:set_string("infotext",
-				S("Circular Saw is empty (owned by %s)")
-				:format(owner))
+				S("Circular Saw is empty"))
 	end,
 
 	-- The amount of items offered per shape can be configured:
