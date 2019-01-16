@@ -17,41 +17,64 @@ economy={}
 economy.machinecapacity=30
 
 economy.itemprices_pr={
-	["default:wood"]=1,
-	["default:tree"]=4,
-	--["default:cobble"]=1,
-	["default:stone"]=2,
-	["default:coalblock"]=50,
-	["default:iron"]=100,
-	["moreores:tin_block"]=100,
-	["default:bronzeblock"]=300,
-	["default:obsidian"]=450,
-	["moreores:silver_block"]=500,
-	["default:goldblock"]=600,
-	["default:mese"]=1111,
-	["intersecting:luxore"]=100,
-	["uw:glowstone"]=300,
-	["homedecor:piano"]=3773,
-	["moreores:mithril_block"]=4444,
-	["nyancat:nyancat_rainbow"]=10000,
-	["nyancat:nyancat"]=50000,
-	["default:apple"]=2,
-	["farming:wheat"]=3,
-	--["default:dirt"]=2,
-	--["default:sand"]=2,
-	["default:desert_sand"]=2,
-	["default:mossycobble"]=10,
-	
-	--["group:leaves"]=1,
-}
-economy.mobkillrewards={
-	["mobs:sand_monster"]=10,
-	["mobs:stone_monster"]=100,
-	["mobs:kitten"]=20,
-	["mobs:cow"]=30,
-	["mobs:mese_monster"]=200,
-	["mobs:dungeonmaster"]=2500,
-	["mobs:oerkki"]=350,
+	["default:wood"] = 1,
+	["default:tree"] = 4,
+	["default:cobble"] = 1,
+	["default:stone"] = 2,
+	["default:desert_stone"] = 2,
+	["default:desert_cobble"] = 1,
+	["default:obsidian"] = 450,
+	["default:silver_sand"] = 2,
+	["default:gravel"] = 2,
+	["default:clay"] = 2,
+	["default:snowblock"] = 2,
+	["default:ice"] = 2,
+	["default:leaves"] = 1,
+	["default:sapling"] = 4,
+	["default:jungletree"] = 4,
+	["default:junglewood"] = 1,
+	["default:jungleleaves"] = 1,
+	["default:junglesapling"] = 4,
+	["default:pine_tree"] = 4,
+	["default:pine_wood"] = 1,
+	["default:pine_needles"] = 1,
+	["default:pine_sapling"] = 4,
+	["default:acacia_tree"] = 4,
+	["default:acacia_wood"] = 1,
+	["default:acacia_leaves"] = 1,
+	["default:acacia_sapling"] = 4,
+	["default:aspen_tree"] = 4,
+	["default:aspen_wood"] = 1,
+	["default:aspen_leaves"] = 1,
+	["default:aspen_sapling"] = 4,
+	["default:coalblock"] = 50,
+	["default:steelblock"] = 100,
+	["default:copperblock"] = 150,
+	["default:tinblock"] = 120,
+	["default:bronzeblock"] = 250,
+	["default:goldblock"] = 600,
+	["default:mese"] = 1111,
+	["default:diamondblock"] = 940,
+	["default:cactus"] = 4,
+	["default:papyrus"] = 1,
+	["default:dry_shrub"] = 1,
+	["default:junglegrass"] = 1,
+	["default:grass_5"] = 1,
+	["default:dry_grass_5"] = 1,
+	["default:bush_sapling"] = 4,
+	["default:acacia_bush_sapling"] = 4,
+	["default:coral_brown"] = 1,
+	["default:coral_orange"] = 1,
+	["default:coral_skeleton"] = 1,
+	["default:water_source"] = 50,
+	["default:lava_source"] = 500,
+	["default:apple"] = 2,
+	["farming:wheat"] = 3,
+	["default:dirt"] = 2,
+	["default:sand"] = 2,
+	["default:desert_sand"] = 2,
+	["default:mossycobble"] = 10,
+	["bones:bones"] = 5,
 }
 
 economy.itemprices={}
@@ -394,11 +417,10 @@ economy.formspecs={
 			
 			local idsp={}
 			for k,v in pairs(economy.itemprices) do
-				if meta:get_int(k)>0 then
-					table.insert(idsp,1,{name=k, price=v, count=meta:get_int(k)})
-				else
-					table.insert(idsp,{name=k, price=v, count=0})
+				if meta:get_int(k) < 1000 then
+					meta:set_int(k, meta:get_int(k) + 1)
 				end
+					table.insert(idsp,1,{name=k, price=v, count=meta:get_int(k)})
 			end
 			local totalPages=math.ceil(#idsp/10)
 			if page<1 then page=1 end
