@@ -3,6 +3,9 @@
 local builtin_item = minetest.registered_entities["__builtin:item"]
 
 local item = {
+	old_pos = nil,
+	checked = false,
+	
 	set_item = function(self, itemstring)
 		builtin_item.set_item(self, itemstring)
 
@@ -41,6 +44,8 @@ local item = {
 
 	on_step = function(self, dtime)
 		builtin_item.on_step(self, dtime)
+		
+		local object = self.object
 
 		if self.flammable then
 			-- flammable, check for igniters
@@ -48,7 +53,7 @@ local item = {
 			if self.ignite_timer > 10 then
 				self.ignite_timer = 0
 
-				local node = minetest.get_node_or_nil(self.object:getpos())
+				local node = minetest.get_node_or_nil(object:getpos())
 				if not node then
 					return
 				end
@@ -65,6 +70,31 @@ local item = {
 					end
 				end
 			end
+		end
+	
+		local pos = object:getpos()
+		
+		if self.checked == true or not self.old_pos or self.old_pos.x ~= pos.x or self.old_pos.y ~= pos.y or self.old_pos.z ~= pos.z then
+			self.old_pos = pos
+			return
+		end
+		
+		self.checked = true
+		
+		local fpos = minetest.find_node_near(pos, 1.85, {"hopper:hopper", "hopper:hopper_side"}, true)
+		
+		if not fpos then
+			return
+		end
+		
+		local node = minetest.get_node_or_nil(fpos)
+		local inv = minetest.get_meta(fpos):get_inventory()
+		if not inv or not inv:room_for_item("main", ItemStack(object:get_luaentity().itemstring)) then
+			self.checked = false
+		end
+		local timer = minetest.get_node_timer(fpos)
+		if not timer:is_started() then
+			timer:start(1.0)
 		end
 	end,
 }
