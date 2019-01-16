@@ -62,9 +62,8 @@ function spawners_mobs.create(mob_table, idx)
 
 		after_place_node = function(pos, placer, itemstack, pointed_thing)
 			local meta = minetest.get_meta(pos)
-			meta:set_string("owner", placer:get_player_name())
 
-			meta:set_string("infotext", mob_name.." spawner\nowner: "..placer:get_player_name().."\nspawner is active")
+			meta:set_string("infotext", mob_name.." spawner\nspawner is active")
 		end,
 
 		on_destruct = function(pos)

@@ -131,14 +131,9 @@ end
 function spawners_mobs.tick(pos)
 	local meta = minetest.get_meta(pos)
 	local tick_counter = meta:get_int("tick")
-	local owner = meta:get_string("owner")
-	local privs = minetest.get_player_privs(owner);
 
-	-- not for admin
-	if not privs.privs then
-		tick_counter = tick_counter + 1
-		meta:set_int("tick", tick_counter)
-	end
+	tick_counter = tick_counter + 1
+	meta:set_int("tick", tick_counter)
 
 	-- print("tick_counter: "..tick_counter.." at "..minetest.pos_to_string(pos))
 
@@ -223,7 +218,6 @@ function spawners_mobs.on_timer(pos, elapsed)
 	local entities_max = 6
 	local node_light_min = 13
 
-	local owner = meta:get_string("owner") or ""
 	local mod_prefix = mob_table.mod_prefix
 	local mob_name = mob_table.name
 	local sound_custom = mob_table.sound_custom
@@ -239,7 +233,7 @@ function spawners_mobs.on_timer(pos, elapsed)
 		spawners_mobs.set_status(pos, "waiting")
 
 		-- set infotext
-		meta:set_string("infotext", mob_name.." spawner\nowner: "..owner.."\nToo dark for mob to spawn. Waiting for day...")
+		meta:set_string("infotext", mob_name.." spawner\nToo dark for mob to spawn. Waiting for day...")
 		spawners_mobs.tick_short(pos)
 		return
 
@@ -249,7 +243,7 @@ function spawners_mobs.on_timer(pos, elapsed)
 		spawners_mobs.set_status(pos, "waiting")
 
 		-- set infotext
-		meta:set_string("infotext", mob_name.." spawner\nowner: "..owner.."\nToo much light for mob to spawn. Waiting for night...")
+		meta:set_string("infotext", mob_name.." spawner\nToo much light for mob to spawn. Waiting for night...")
 		spawners_mobs.tick_short(pos)
 		return
 	end
@@ -262,7 +256,7 @@ function spawners_mobs.on_timer(pos, elapsed)
 		spawners_mobs.set_status(pos, "waiting")
 
 		-- set infotext
-		meta:set_string("infotext", mob_name.." spawner\nowner: "..owner.."\nNot enough place to spawn mob. Find more space!")
+		meta:set_string("infotext", mob_name.." spawner\nNot enough place to spawn mob. Find more space!")
 		spawners_mobs.tick(pos)
 		return
 	end
@@ -278,7 +272,7 @@ function spawners_mobs.on_timer(pos, elapsed)
 			local random_pos = spawn_area_pos[math.random(#spawn_area_pos)]
 			local random_pos_above = minetest.get_node({ x = random_pos.x, y = random_pos.y + 1, z = random_pos.z }).name
 
-			if random_pos_above == "air" and not minetest.is_protected(random_pos, owner) then
+			if random_pos_above == "air" then
 				table.insert(spawn_area_random_pos, random_pos)
 				-- print("spawn_area_random_pos: "..#spawn_area_random_pos)
 			else
@@ -296,7 +290,7 @@ function spawners_mobs.on_timer(pos, elapsed)
 		spawners_mobs.set_status(pos, "waiting")
 
 		-- set infotext
-		meta:set_string("infotext", mob_name.." spawner\nowner: "..owner.."\nNot enough place to spawn mob. Searching for new location...")
+		meta:set_string("infotext", mob_name.." spawner\nNot enough place to spawn mob. Searching for new location...")
 		spawners_mobs.tick_short(pos)
 		return
 	end
@@ -309,7 +303,7 @@ function spawners_mobs.on_timer(pos, elapsed)
 		spawners_mobs.set_status(pos, "waiting")
 
 		-- set infotext
-		meta:set_string("infotext", mob_name.." spawner\nowner: "..owner.."\nToo many objects in the area ("..#activation_area.."/"..max_objects.."), clean-up dropped objects first!")
+		meta:set_string("infotext", mob_name.." spawner\nToo many objects in the area ("..#activation_area.."/"..max_objects.."), clean-up dropped objects first!")
 		spawners_mobs.tick_short(pos)
 		return
 	end
@@ -359,7 +353,7 @@ function spawners_mobs.on_timer(pos, elapsed)
 			name = "sheep"
 		end
 
-		meta:set_string("infotext", mob_name.." spawner\nowner: "..owner.."\nmax mobs reached: "..entities_near.."/"..entities_max) -- or player not near
+		meta:set_string("infotext", mob_name.." spawner\nmax mobs reached: "..entities_near.."/"..entities_max) -- or player not near
 		spawners_mobs.tick_short(pos)
 		return
 	end
@@ -368,7 +362,7 @@ function spawners_mobs.on_timer(pos, elapsed)
 	spawners_mobs.start_spawning(spawn_area_random_pos, mob_name, mod_prefix, sound_custom)
 
 	spawners_mobs.set_status(pos, "active")
-	meta:set_string("infotext", mob_name.." spawner\nowner: "..owner.."\nspawner is active reached: "..entities_near.."/"..entities_max)
+	meta:set_string("infotext", mob_name.." spawner\nspawner is active reached: "..entities_near.."/"..entities_max)
 
 	meta:set_int("tick", 0)
 	meta:set_int("tick_short", 0)
@@ -391,7 +385,6 @@ function spawners_mobs.set_status(pos, set_status)
 	local offset = mob_table.dummy_offset
 
 	-- get meta
-	local owner = meta:get_string("owner")
 	local meta_status = meta:get_string("status")
 	local id_flame = meta:get_int("id_flame")
 	local id_smoke = meta:get_int("id_smoke")
@@ -485,7 +478,7 @@ function spawners_mobs.set_status(pos, set_status)
 		minetest.swap_node(pos, {name="spawners_mobs:"..mod_prefix.."_"..mob_name.."_spawner_rusty"})
 
 		-- set infotext
-		meta:set_string("infotext", mob_name.." spawner\nowner: "..owner.."\nSpawner was searching for too long and got rusted! Dig up the spawner and place it again.")
+		meta:set_string("infotext", mob_name.." spawner\nSpawner was searching for too long and got rusted! Dig up the spawner and place it again.")
 		return
 	end
 
