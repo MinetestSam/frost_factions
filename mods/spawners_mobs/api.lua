@@ -5,6 +5,7 @@ local max_obj_per_mapblock = tonumber(minetest.settings:get("max_objects_per_blo
 local enable_particles = true
 local tick_max = 40
 local tick_short_max = 40
+local blacklist_craft = {["mummy"] = true, ["spider"] = true, ["stone_monster"] = true, ["oerkki"] = true, ["tree_monster"] = true, ["bunny_evil"] = true, ["uruk_hai"] = true, ["balrog"] = true}
 
 -- check if mods exists and build tables
 for k, mob_mod in ipairs(ENABLED_MODS) do
@@ -38,19 +39,23 @@ for k, mob_mod in ipairs(ENABLED_MODS) do
 			end
 
 			-- recipes
-			minetest.register_craft({
-				output = "spawners_mobs:"..mob_mod.."_"..mob.name.."_spawner",
-				recipe = {
-					{"default:diamondblock", "fire:flint_and_steel", "default:diamondblock"},
-					{"xpanes:bar_flat", mob_egg, "xpanes:bar_flat"},
-					{"default:diamondblock", "xpanes:bar_flat", "default:diamondblock"},
-				}
-			})
+			if not blacklist_craft[mob.name] then
+				minetest.register_craft({
+					output = "spawners_mobs:"..mob_mod.."_"..mob.name.."_spawner",
+					recipe = {
+						{"default:diamondblock", "fire:flint_and_steel", "default:diamondblock"},
+						{"xpanes:bar_flat", mob_egg, "xpanes:bar_flat"},
+						{"default:diamondblock", "xpanes:bar_flat", "default:diamondblock"},
+					}
+				})
+			end
 
 			-- ::continue::
 		end
 	end
 end
+
+blacklist_craft = nil
 
 --
 -- Particles
