@@ -201,7 +201,7 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = "bow:flint_arrow",
+	output = "bow:flint_arrow 16",
 	recipe = {
 		{"default:flint"},
 		{"default:stick"},
