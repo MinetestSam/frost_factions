@@ -23,7 +23,7 @@ economy.itemprices_pr={
 	["default:stone"] = 2,
 	["default:desert_stone"] = 2,
 	["default:desert_cobble"] = 1,
-	["default:obsidian"] = 450,
+	["default:obsidian"] = 550,
 	["default:silver_sand"] = 2,
 	["default:gravel"] = 2,
 	["default:clay"] = 2,
@@ -52,9 +52,9 @@ economy.itemprices_pr={
 	["default:copperblock"] = 150,
 	["default:tinblock"] = 120,
 	["default:bronzeblock"] = 250,
-	["default:goldblock"] = 600,
-	["default:mese"] = 1111,
-	["default:diamondblock"] = 940,
+	["default:goldblock"] = 700,
+	["default:mese"] = 600,
+	["default:diamondblock"] = 960,
 	["default:cactus"] = 4,
 	["default:papyrus"] = 1,
 	["default:dry_shrub"] = 1,
@@ -80,7 +80,6 @@ economy.itemprices_pr={
 	["farming:seed_cotton"] = 6,
 	["farming:corn"] = 20,
 	["farming:cucumber"] = 15,
-	["farming:garlic_clove"] = 5,
 	["farming:grapes"] = 1,
 	["farming:seed_hemp"] = 5,
 	["farming:melon_slice"] = 10,
@@ -112,6 +111,10 @@ economy.itemprices_pr={
 	["spawners_mobs:spawners_mobs_bunny_evil_spawner"] = 20000,
 	["spawners_mobs:spawners_mobs_uruk_hai_spawner"] = 80000,
 	["spawners_mobs:spawners_mobs_balrog_spawner"] = 9990900,
+	["pbj_pup:pbj_pup"] = 25000,
+	["nyancat:nyancat"] = 25000,
+	["moognu:moognu"] = 25000,
+	["nyancat:nyancat_rainbow"] = 1500,
 }
 
 economy.itemprices={}
@@ -455,7 +458,7 @@ economy.formspecs={
 			local idsp={}
 			for k,v in pairs(economy.itemprices) do
 				if meta:get_int(k) < 1000 then
-					meta:set_int(k, meta:get_int(k) + 1)
+					meta:set_int(k, 1000)
 				end
 					table.insert(idsp,1,{name=k, price=v, count=meta:get_int(k)})
 			end
