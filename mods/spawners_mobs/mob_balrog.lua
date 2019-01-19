@@ -121,47 +121,6 @@ local balrog_def = {
 		speed_normal = 15,
 		speed_run = 15,
 	},
-	_timer = 0,
-	_random_trigger = 15,
-	do_custom = function(self, dtime)
-		if not self._timer then
-			self._timer = 0
-		end
-
-		if not self._random_trigger then
-			self._random_trigger = math.random(15, 30)
-		end
-
-		self._timer = self._timer + dtime
-
-		if self._timer > self._random_trigger then
-			self._timer = 0
-			self._random_trigger = math.random(15, 30)
-
-			local mob_pos = self.object:get_pos()
-			local activation_area = minetest.get_objects_inside_radius(mob_pos, 20)
-			for k, object in ipairs(activation_area) do
-				if object:is_player() then
-					local player_pos = object:get_pos()
-					local player_hp = object:get_hp()
-
-					-- is in MMO Arena & health check
-					if x_default:isInMMOArena(player_pos) and player_hp > 0 then
-						-- play sound
-						minetest.sound_play("spawners_mobs_teleport", {
-							object = object,
-							gain = 1.0,
-							max_hear_distance = 20
-						})
-
-						-- teleport player
-						object:set_pos(mob_pos)
-					end
-
-				end
-			end
-		end
-	end
 }
 
 mobs:register_mob("spawners_mobs:balrog", balrog_def)
