@@ -12,44 +12,52 @@ minetest.register_tool("lockpicks:lockpick_wood", {
 		groupcaps = {locked={maxlevel=1, uses=10, times={[3]=5.00}}}
 	}
 })
+minetest.register_tool("lockpicks:lockpick_tin", {
+	description="Tin Lockpick",
+	inventory_image = "tin_lockpick.png",
+	tool_capabilities = {
+		max_drop_level = 2,
+		groupcaps = {locked={maxlevel=2, uses=20, times={[2]=7.00,[3]=4.50}}}
+	}
+})
 minetest.register_tool("lockpicks:lockpick_steel", {
 	description="Steel Lockpick",
 	inventory_image = "steel_lockpick.png",
 	tool_capabilities = {
-		max_drop_level = 2,
-		groupcaps = {locked={maxlevel=2, uses=20, times={[2]=7.00,[3]=4.50}}}
+		max_drop_level = 3,
+		groupcaps = {locked={maxlevel=2, uses=30, times={[2]=6.00,[3]=4.00}}}
 	}
 })
 minetest.register_tool("lockpicks:lockpick_copper", {
 	description="Copper Lockpick",
 	inventory_image = "copper_lockpick.png",
 	tool_capabilities = {
-		max_drop_level = 3,
-		groupcaps = {locked={maxlevel=2, uses=30, times={[2]=6.00,[3]=4.00}}}
-	}
-})
-minetest.register_tool("lockpicks:lockpick_silver", {
-	description="Silver Lockpick",
-	inventory_image = "silver_lockpick.png",
-	tool_capabilities = {
 		max_drop_level = 4,
 		groupcaps = {locked={maxlevel=3, uses=40, times={[1]=20.00,[2]=5.00,[3]=3.00}}}
+	}
+})
+minetest.register_tool("lockpicks:lockpick_bronze", {
+	description="Bronze Lockpick",
+	inventory_image = "bronze_lockpick.png",
+	tool_capabilities = {
+		max_drop_level = 5,
+		groupcaps = {locked={maxlevel=3, uses=50, times={[1]=15.00,[2]=4.50,[3]=2.00}}}
 	}
 })
 minetest.register_tool("lockpicks:lockpick_gold", {
 	description="Gold Lockpick",
 	inventory_image = "gold_lockpick.png",
 	tool_capabilities = {
-		max_drop_level = 5,
-		groupcaps = {locked={maxlevel=3, uses=50, times={[1]=15.00,[2]=4.50,[3]=2.00}}}
-	}
-})
-minetest.register_tool("lockpicks:lockpick_mithril", {
-	description="Mithril Lockpick",
-	inventory_image = "mithril_lockpick.png",
-	tool_capabilities = {
 		max_drop_level = 6,
 		groupcaps = {locked={maxlevel=3, uses=50, times={[1]=10.00,[2]=4.00,[3]=1.00}}}
+	}
+})
+minetest.register_tool("lockpicks:lockpick_diamond", {
+	description="Diamond Lockpick",
+	inventory_image = "diamond_lockpick.png",
+	tool_capabilities = {
+		max_drop_level = 7,
+		groupcaps = {locked={maxlevel=3, uses=50, times={[1]=5.00,[2]=3.50,[3]=0.50}}}
 	}
 })
 
@@ -76,7 +84,15 @@ minetest.register_craft({
 	recipe = {
 		{"", "default:stick", "default:stick"},
 		{"", "default:stick", ""},
-		{"", "default:wood", ""}
+		{"", "group:wood", ""}
+	}
+})
+minetest.register_craft({
+	output = "lockpicks:lockpick_tin",
+	recipe = {
+		{"", "default:tin_ingot", "default:tin_ingot"},
+		{"", "default:tin_ingot", ""},
+		{"", "group:wood", ""}
 	}
 })
 minetest.register_craft({
@@ -84,22 +100,22 @@ minetest.register_craft({
 	recipe = {
 		{"", "default:steel_ingot", "default:steel_ingot"},
 		{"", "default:steel_ingot", ""},
-		{"", "default:wood", ""}
+		{"", "group:wood", ""}
 	}
 })
 minetest.register_craft({
 	output = "lockpicks:lockpick_copper",
 	recipe = {
-		{"", "default:copper_ingot", "default::copper_ingot"},
-		{"", "default::copper_ingot", ""},
+		{"", "default:copper_ingot", "default:copper_ingot"},
+		{"", "default:copper_ingot", ""},
 		{"", "default:steel_ingot", ""}
 	}
 })
 minetest.register_craft({
-	output = "lockpicks:lockpick_silver",
+	output = "lockpicks:lockpick_bronze",
 	recipe = {
-		{"", "moreores:silver_ingot", "moreores:silver_ingot"},
-		{"", "moreores:silver_ingot", ""},
+		{"", "default:bronze_ingot", "default:bronze_ingot"},
+		{"", "default:bronze_ingot", ""},
 		{"", "default:steel_ingot", ""}
 	}
 })
@@ -112,10 +128,10 @@ minetest.register_craft({
 	}
 })
 minetest.register_craft({
-	output = "lockpicks:lockpick_mithril",
+	output = "lockpicks:lockpick_diamond",
 	recipe = {
-		{"", "moreores:mithril_ingot", "moreores:mithril_ingot"},
-		{"", "moreores:mithril_ingot", ""},
+		{"", "default:diamond", "default:diamond"},
+		{"", "default:diamond", ""},
 		{"", "default:steel_ingot", ""}
 	}
 })
