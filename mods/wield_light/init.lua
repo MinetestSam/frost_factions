@@ -36,45 +36,50 @@ local c_helper_name = minetest.get_content_id(HELPER_NAME)
 local function step()
 	for _, player in pairs(minetest.get_connected_players()) do
 		local item = player:get_wielded_item():get_name()
-		if not sources[item] then
-			return
-		end
-		local pos = vector.round(player:getpos())
-		pos.y = pos.y + 1
-		if positions[minetest.hash_node_position(pos)] == nil then
-			
-			local vm = minetest.get_voxel_manip()
-			
-			local emin, emax = vm:read_from_map(pos, pos)
-			
-			local a = VoxelArea:new{
-				MinEdge = emin,
-				MaxEdge = emax
-			}
-			
-			local data = vm:get_data()
-			
-			local target_node = a:index(pos.x, pos.y, pos.z)
-			
-			local target_node_data = data[target_node]
-			
-			if target_node_data == c_air and target_node_data ~= c_helper_name then
-				data[target_node] = c_helper_name
-				vm:set_data(data)
-				vm:write_to_map(true)
-				minetest.get_node_timer(pos):start(0.3)
+		if sources[item] then
+			local pos = vector.round(player:getpos())
+			pos.y = pos.y + 1
+			if positions[minetest.hash_node_position(pos)] == nil then
+				
+				local vm = minetest.get_voxel_manip()
+				
+				local emin, emax = vm:read_from_map(pos, pos)
+				
+				local a = VoxelArea:new{
+					MinEdge = emin,
+					MaxEdge = emax
+				}
+				
+				local data = vm:get_data()
+				
+				local target_node = a:index(pos.x, pos.y, pos.z)
+				
+				local target_node_data = data[target_node]
+				
+				if target_node_data == c_air and target_node_data ~= c_helper_name then
+					data[target_node] = c_helper_name
+					vm:set_data(data)
+					vm:write_to_map(true)
+					minetest.get_node_timer(pos):start(0.3)
+				end
+				positions[minetest.hash_node_position(pos)] = true
+			elseif positions[minetest.hash_node_position(pos)] == false then
+				positions[minetest.hash_node_position(pos)] = true
 			end
-			positions[minetest.hash_node_position(pos)] = true
-		elseif positions[minetest.hash_node_position(pos)] == false then
-			positions[minetest.hash_node_position(pos)] = true
 		end
 	end
 	minetest.after(0.2, step)
 end
 
-step()
+minetest.after(0.2, step)
 
 wield_light.register_source('default:torch')
+wield_light.register_source('default:mese_post_lamp')
+wield_light.register_source('default:lava_source')
+wield_light.register_source('default:meselamp')
+wield_light.register_source('mobs:lava_orb')
+wield_light.register_source('mobs:pick_lava')
+wield_light.register_source('mesecons_torch:mesecon_torch_on')
 wield_light.register_source('bucket:bucket_lava')
 wield_light.register_source('xdecor:candle')
 wield_light.register_source('xdecor:lantern')
