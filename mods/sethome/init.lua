@@ -57,14 +57,22 @@ sethome.get = function(name)
 	end
 end
 
+local tip = {}
+
 sethome.go = function(name)
-	local pos = sethome.get(name)
 	local player = minetest.get_player_by_name(name)
-	if player and pos then
-		player:setpos(pos)
-		return true
+	local pos = minetest.string_to_pos(player:get_attribute("sethome:home"))
+	if pos then
+		return pos
 	end
-	return false
+
+	-- fetch old entry from storage table
+	pos = homepos[name]
+	if pos then
+		return vector.new(pos)
+	else
+		return nil
+	end
 end
 
 minetest.register_privilege("home", {
@@ -77,7 +85,19 @@ minetest.register_chatcommand("home", {
 	privs = {home = true},
 	func = function(name)
 		if sethome.go(name) then
-			return true, "Teleported to home!"
+			if tip[name] then
+				return false, "Your already being teleported!"
+			end
+			local player = minetest.get_player_by_name(name)
+			minetest.after(5, function(player, name) 
+				if player and tip[name] then
+					minimal_anticheat.whitelist_player(name, 5)
+					player:set_pos(sethome.get(name)) 
+				end
+				tip[name] = nil
+			end, player, name)
+			tip[name] = true
+			return true, "You will be teleported in five seconds."
 		end
 		return false, "Set a home using /sethome"
 	end,
@@ -95,3 +115,10 @@ minetest.register_chatcommand("sethome", {
 		return false, "Player not found!"
 	end,
 })
+
+minetest.register_on_leaveplayer(
+	function(player)
+		local name = player:get_player_name()
+		tip[name] = nil
+	end
+)

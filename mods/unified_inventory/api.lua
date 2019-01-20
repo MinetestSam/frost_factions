@@ -184,14 +184,36 @@ function unified_inventory.set_home(player, pos)
 	io.close(output)
 end
 
+local tip = {}
+
 function unified_inventory.go_home(player)
 	local name = player:get_player_name()
 	local pos = unified_inventory.home_pos[name]
 	if pos then
-		minimal_anticheat.whitelist_player(name, 5)
-		player:setpos(pos)
+		if tip[name] then
+			minetest.chat_send_player(name, "Your already being teleported!")
+			return false
+		end
+		local player = minetest.get_player_by_name(name)
+		minetest.after(5, function(player, name) 
+			if player and tip[name] then
+				minimal_anticheat.whitelist_player(name, 5)
+				player:set_pos(pos)
+			end
+			tip[name] = nil
+		end, player, name)
+		tip[name] = true
+		minetest.chat_send_player(name, "You will be teleported in five seconds.")
+		return true
 	end
 end
+
+minetest.register_on_leaveplayer(
+	function(player)
+		local name = player:get_player_name()
+		tip[name] = nil
+	end
+)
 
 -- register_craft
 function unified_inventory.register_craft(options)
