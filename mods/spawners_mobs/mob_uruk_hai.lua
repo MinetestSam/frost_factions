@@ -42,7 +42,6 @@ local uruk_hai_def = {
 		{name = "default:torch", chance = 3, min = 1, max = 2},
 		{name = "default:sword_bronze", chance = 5, min = 1, max = 1},
 		{name = "default:sword_mese", chance = 6, min = 1, max = 1},
-		{name = "obsidianmese:sword_engraved", chance = 20, min = 1, max = 1},
 		{name = "bones:bones", chance = 5, min = 1, max = 1},
 		{name = "spawners_mobs:uruk_hai", chance = 20, min = 1, max = 1},
 	},

@@ -208,37 +208,12 @@ function spawners_mobs.on_timer(pos, elapsed)
 	local player_near = false
 	local entities_near = 0
 	local entities_max = 6
-	local node_light_min = 13
 
 	local mod_prefix = mob_table.mod_prefix
 	local mob_name = mob_table.name
 	local sound_custom = mob_table.sound_custom
 	local night_only = mob_table.night_only
 	local max_objects = max_obj_per_mapblock / 4
-
-	-- check spawner light
-	local node_light = minetest.get_node_light(pos)
-
-	-- dark
-	if (not node_light or node_light < node_light_min) and not night_only then
-		-- print("Too dark for mob ( "..mob_name.." ) to spawn. Waiting for day...")
-		spawners_mobs.set_status(pos, "waiting")
-
-		-- set infotext
-		meta:set_string("infotext", mob_name.." spawner\nToo dark for mob to spawn. Waiting for day...")
-		spawners_mobs.tick_short(pos)
-		return
-
-	-- light
-	elseif node_light >= node_light_min and night_only then
-		-- print("Too much light for mob ( "..mob_name.." ) to spawn. Waiting for night...")
-		spawners_mobs.set_status(pos, "waiting")
-
-		-- set infotext
-		meta:set_string("infotext", mob_name.." spawner\nToo much light for mob to spawn. Waiting for night...")
-		spawners_mobs.tick_short(pos)
-		return
-	end
 
 	-- positions where mobs can spawn
 	local spawn_area_pos = minetest.find_nodes_in_area(posmin, posmax, "air")

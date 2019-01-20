@@ -38,7 +38,7 @@ mobs:register_mob("mobs_monster:tree_monster", {
 		{name = "default:apple", chance = 4, min = 1, max = 2},
 	},
 	water_damage = 0,
-	lava_damage = 0,
+	lava_damage = 5,
 	light_damage = 2,
 	fall_damage = 0,
 --	immune_to = {
