@@ -92,10 +92,6 @@ minimal_anticheat.secondary_check_cheater_on_coal = function(player, pos)
     if player and player:is_player() and minimal_anticheat.whitelist[player:get_player_name()] == nil and player:get_hp() > 0 and
         (minimal_anticheat.sureclip_nodes[minetest.get_node(pos).name] == 1 or
          minimal_anticheat.clip_nodes[minetest.get_node(pos).name] == 1)  then
-        player:punch(player, 1.0,  {
-                full_punch_interval=1.0,
-                damage_groups = {fleshy=20}
-            }, {x=0, y=1, z=0})
         local name = player:get_player_name()
         minetest.chat_send_all("Player "..name.." suspected in noclip cheat");
         minetest.log("action", "Player "..name.." at "..minetest.pos_to_string(vector.round(pos)).." suspected in noclip cheat - oncoal");
@@ -123,10 +119,6 @@ minetest.after(8.0, minimal_anticheat.check_cheater_on_coal)
 minimal_anticheat.secondary_check_cheater_in_wall = function(player, pos)
     if player and player:is_player() and minimal_anticheat.whitelist[player:get_player_name()] == nil and player:get_hp() > 0 and
         minimal_anticheat.clip_nodes[minetest.get_node(pos).name] == 1 then
-        player:punch(player, 1.0,  {
-                full_punch_interval=1.0,
-                damage_groups = {fleshy=10}
-            }, {x=0, y=1, z=0})
         local name = player:get_player_name()
         minetest.chat_send_all("Player "..name.." suspected in noclip cheat");
         minetest.log("action", "Player "..name.." at "..minetest.pos_to_string(vector.round(pos)).." suspected in noclip cheat - inwall");
@@ -161,10 +153,6 @@ minimal_anticheat.check_cheater_on_air = function ()
 						{x=pos.x+3, y=pos.y+3, z=pos.z+3},
 						{"air", "ignore"})
 				if #positions == 343 then   --only air around
-					player:punch(player, 1.0,  {
-							full_punch_interval=1.0,
-							damage_groups = {fleshy=18}
-						}, {x=0, y=-1, z=0})
                     local name = player:get_player_name()
                     minetest.chat_send_all("Player "..name.." suspected in fly cheat");
                     minetest.log("action", "Player "..name.." at "..minetest.pos_to_string(vector.round(pos)).." suspected in fly cheat");
@@ -186,10 +174,6 @@ minimal_anticheat.check_cheater_by_engine = function (player, cheat)
         if cheat.type == "dug_too_fast" then
             -- looks like this one has almost no false-positives, punish him hard.
             if player:get_hp() > 0 then
-                player:punch(player, 1.0,  {
-                        full_punch_interval=1.0,
-                        damage_groups = {fleshy=4}
-                    }, {x=0, y=-1, z=0})
                 minetest.chat_send_all("Player "..name.." suspected in dig cheat");
                 minetest.log("action", "Player "..name.." at "..text_pos.." suspected in dig cheat");
             end
@@ -197,10 +181,6 @@ minimal_anticheat.check_cheater_by_engine = function (player, cheat)
             --it happens to regular players too, so don't be too harsh...
             if math.random(1, 100) > 80 then
                 if player:get_hp() > 0 then
-                    player:punch(player, 1.0,  {
-                            full_punch_interval=1.0,
-                            damage_groups = {fleshy=4}
-                        }, {x=0, y=-1, z=0})
                     minetest.chat_send_all("Player "..name.." suspected in too far cheat (maybe)");
                     minetest.log("action", "Player "..name.." at "..text_pos.." suspected in too far cheat");
                 end
@@ -209,10 +189,6 @@ minimal_anticheat.check_cheater_by_engine = function (player, cheat)
             --it happens to regular players too, so don't be too harsh...
             if math.random(1, 100) > 90 then
                 if player:get_hp() > 0 then
-                    player:punch(player, 1.0,  {
-                            full_punch_interval=1.0,
-                            damage_groups = {fleshy=4}
-                        }, {x=0, y=-1, z=0})
                     minetest.chat_send_all("Player "..name.." suspected in too fast cheat (maybe)");
                     minetest.log("action", "Player "..name.." at "..text_pos.." suspected in too fast cheat");
                 end
