@@ -1,12 +1,7 @@
 minetest.after(0, function()
 	if minetest.registered_nodes["default:chest_locked"] ~= nil then
-		local node_clone = {}
 
-		for k,v in pairs(minetest.registered_nodes["default:chest_locked"]) do
-			node_clone[k] = v
-		end
-
-		node_clone.can_dig = function(pos, player)
+		local can_dig = function(pos, player)
 			local meta = minetest.get_meta(pos)
 			local inv = meta:get_inventory()
 			local tool = player:get_wielded_item():get_tool_capabilities()
@@ -24,12 +19,13 @@ minetest.after(0, function()
 					else
 						player:set_wielded_item(nil)
 						minetest.chat_send_player(player:get_player_name(), "Your lockpick broke!")
+						return false
 					end
 				end
 			end
 			return inv:is_empty("main") and default.can_interact_with_node(player, pos)
 		end
 
-		minetest.register_node(":default:chest_locked", node_clone)
+		minetest.override_item("default:chest_locked",{can_dig = can_dig})
 	end
 end)
