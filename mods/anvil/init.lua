@@ -141,16 +141,12 @@ minetest.register_node("anvil:anvil", {
 	
 	after_place_node = function(pos, placer)
 		local meta = minetest.get_meta(pos)
-		meta:set_string("owner", placer:get_player_name() or "")
 	end,
 	
 	can_dig = function(pos,player)
 		local meta  = minetest.get_meta(pos)
 		local inv   = meta:get_inventory()
-		--[[
-		if player:get_player_name() ~= meta:get_string("owner") then
-			return false
-	]]
+
 		if not inv:is_empty("input") then
 			return false
 		end
@@ -188,28 +184,25 @@ minetest.register_node("anvil:anvil", {
 	on_rightclick = function(pos, node, clicker, itemstack)
 		local meta = minetest.get_meta(pos)
 		local name = clicker:get_player_name()
-		--minetest.chat_send_player(name,">>> owner is :"..dump(meta:get_string("owner")).." used by : "..name)
-		if name == meta:get_string("owner") then
-		      if itemstack:get_count() == 0 then
-			      local inv = meta:get_inventory()
-			      if not inv:is_empty("input") then
-				      local return_stack = inv:get_stack("input", 1)
-				      inv:set_stack("input", 1, nil)
-				      local wield_index = clicker:get_wield_index()
-				      clicker:get_inventory():set_stack("main", wield_index, return_stack)
-				      remove_item(pos, node)
-				      return return_stack
-			      end		
-		      end
-		      local this_def = minetest.registered_nodes[node.name]
-		      if this_def.allow_metadata_inventory_put(pos, "input", 1, itemstack:peek_item(), clicker) > 0 then
-			      local s = itemstack:take_item()
-			      local meta = minetest.get_meta(pos)
-			      local inv = meta:get_inventory()
-			      inv:add_item("input", s)
-			      update_item(pos,node)
-		      end
-		end
+		  if itemstack:get_count() == 0 then
+			  local inv = meta:get_inventory()
+			  if not inv:is_empty("input") then
+				  local return_stack = inv:get_stack("input", 1)
+				  inv:set_stack("input", 1, nil)
+				  local wield_index = clicker:get_wield_index()
+				  clicker:get_inventory():set_stack("main", wield_index, return_stack)
+				  remove_item(pos, node)
+				  return return_stack
+			  end		
+		  end
+		  local this_def = minetest.registered_nodes[node.name]
+		  if this_def.allow_metadata_inventory_put(pos, "input", 1, itemstack:peek_item(), clicker) > 0 then
+			  local s = itemstack:take_item()
+			  local meta = minetest.get_meta(pos)
+			  local inv = meta:get_inventory()
+			  inv:add_item("input", s)
+			  update_item(pos,node)
+		  end
 		return itemstack
 	end,
 	
