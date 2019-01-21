@@ -2,3 +2,4 @@ default?
 doors?
 spawn
 minimal_anticheat
+xdecor?

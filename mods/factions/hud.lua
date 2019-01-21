@@ -10,7 +10,7 @@ function createHudfactionLand(player)
 				name = "factionLand",
 				number = 0xFFFFFF,
 				position = {x=0.1, y = .98},
-				text = "Wilderness",
+				text = "Parcel:",
 				scale = {x=1, y=1},
 				alignment = {x=0, y=0},
 			})
@@ -93,7 +93,7 @@ function updateFactionName(player,factionname)
 	end
 	local id_name = name .. "factionName"
 	if hud_ids[id_name] then
-		p:hud_change(hud_ids[id_name],"text","Faction "..factionname)
+		p:hud_change(hud_ids[id_name],"text","Faction " .. factionname)
 	end
 end
 
@@ -105,7 +105,11 @@ function hudUpdateClaimInfo()
 		local faction = factions.get_faction_at(player:getpos())
 		local id_name = name .. "factionLand"
 		if hud_ids[id_name] then
-			player:hud_change(hud_ids[id_name],"text",(faction and faction.name) or "Wilderness")
+			local display = "Parcel:"
+			if (faction and faction.name) then
+				display = display .. faction.name
+			end
+			player:hud_change(hud_ids[id_name], "text", display)
 		end
 	end
 	minetest.after(3,hudUpdateClaimInfo)
