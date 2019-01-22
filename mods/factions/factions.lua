@@ -341,6 +341,8 @@ end
 
 function factions.Faction.remove_player(self, player)
     self.players[player] = nil
+	self.onlineplayers[player] = nil
+	self.offlineplayers[player] = nil
     factions.players[player] = nil
     self:on_player_leave(player)
 	self:check_players_in_faction(self)
@@ -1023,17 +1025,12 @@ function factions.save()
     --due to figuring out which data to save and which is temporary only
     --all data is saved here
     --this implies data needs to be cleant up on load
-
-    local file,error = io.open(factions_worldid .. "/" .. "factions.conf","w")
-
-    if file ~= nil then
-        file:write(minetest.serialize(factions.factions))
-        file:close()
-    else
+	saving = false
+	if not minetest.safe_file_write(factions_worldid .. "/" .. "factions.conf",minetest.serialize(factions.factions)) then
         minetest.log("error","MOD factions: unable to save factions world specific data!: " .. error)
+		factions.bulk_save()
     end
 	factions_ip.save()
-	saving = false
 end
 
 function factions.bulk_save()
@@ -1239,11 +1236,8 @@ function factions.faction_tick()
     end
 end
 
-local player_count = 0
-
 minetest.register_on_joinplayer(
 function(player)
-	player_count = player_count + 1
 	local name = player:get_player_name()
 	minetest.after(5,createHudfactionLand,player)
     local faction = factions.get_player_faction(name)
@@ -1252,7 +1246,7 @@ function(player)
 		minetest.after(5,createHudFactionName,player,faction.name)
 		minetest.after(5,createHudPower,player,faction)
 		faction.offlineplayers[name] = nil
-		faction.onlineplayers[name] = 1
+		faction.onlineplayers[name] = true
 		if faction.no_parcel ~= -1 then
 			local now = os.time() - faction.no_parcel
 			local l = factions_config.maximum_parcelless_faction_time
@@ -1282,7 +1276,6 @@ end
 
 minetest.register_on_leaveplayer(
 	function(player)
-		player_count = player_count - 1
 		local name = player:get_player_name()
 		local faction = factions.get_player_faction(name)
 		local id_name1 = name .. "factionLand"
@@ -1298,13 +1291,8 @@ minetest.register_on_leaveplayer(
 			if hud_ids[id_name3] then
 				hud_ids[id_name3] = nil
 			end
-			faction.offlineplayers[name] = 1
+			faction.offlineplayers[name] = true
 			faction.onlineplayers[name] = nil
-		end
-		if player_count > 0 then
-			factions.bulk_save()
-		else
-			factions.save()
 		end
 	end
 )
@@ -1325,7 +1313,11 @@ minetest.register_on_respawnplayer(
     end
 )
 
-
+minetest.register_on_shutdown(
+	function()
+		factions.save()
+		saving = false
+end)
 
 local default_is_protected = minetest.is_protected
 minetest.is_protected = function(pos, player)

@@ -367,14 +367,18 @@ factions.register_command("join", {
     infaction = false,
 	global_privileges = def_global_privileges,
     on_success = function(player, faction, pos, parcelpos, args)
-        local new_faction = args.factions[1]
-        if new_faction:can_join(player) then
-            if faction then -- leave old faction
-                faction:remove_player(player)
-            end
+        if faction ~= nil or faction then
+			send_error(player, "You need to leave your current faction in order to join this one.")
+            return false
+		end
+		local new_faction = args.factions[1]
+        if new_faction and new_faction:can_join(player) then
             new_faction:add_player(player)
-        else
+        elseif new_faction then
             send_error(player, "You cannot join this faction.")
+            return false
+		else
+			send_error(player, "Enter the right faction name.")
             return false
         end
         return true
@@ -448,7 +452,9 @@ factions.register_command("invite", {
     description = "Invite a player to your faction.",
 	global_privileges = def_global_privileges,
     on_success = function(player, faction, pos, parcelpos, args)
-        faction:invite_player(args.players[1]:get_player_name())
+        if args.players and args.players[1] then
+			faction:invite_player(args.players[1]:get_player_name())
+		end
         return true
     end
 },false)
