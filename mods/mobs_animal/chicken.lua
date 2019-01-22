@@ -35,7 +35,7 @@ stepheight = 0.6,
 	runaway_from = {"player", "mobs_animal:pumba"},
 	drops = {
 		{name = "mobs:chicken_raw", chance = 1, min = 1, max = 1},
-		{name = "mobs:chicken_feather", chance = 1, min = 0, max = 2},
+		{name = "mobs:chicken_feather", chance = 1, min = 1, max = 2},
 	},
 	water_damage = 1,
 	lava_damage = 5,

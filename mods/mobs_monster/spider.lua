@@ -43,7 +43,7 @@ mobs:register_mob("mobs_monster:spider", {
 	view_range = 15,
 	floats = 0,
 	drops = {
-		{name = "farming:string", chance = 1, min = 0, max = 2},
+		{name = "farming:string", chance = 1, min = 1, max = 2},
 	},
 	water_damage = 5,
 	lava_damage = 5,

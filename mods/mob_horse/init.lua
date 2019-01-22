@@ -41,7 +41,7 @@ mobs:register_mob("mob_horse:horse", {
 	water_damage = 1,
 	makes_footstep_sound = true,
 	drops = {
-		{name = "mobs:leather", chance = 1, min = 0, max = 2}
+		{name = "mobs:leather", chance = 1, min = 1, max = 2}
 	},
 
 	do_custom = function(self, dtime)

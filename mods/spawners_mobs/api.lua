@@ -1,7 +1,7 @@
 -- main tables
 spawners_mobs = {}
 spawners_mobs.mob_tables = {}
-local max_obj_per_mapblock = tonumber(minetest.settings:get("max_objects_per_block"))
+local max_obj_per_mapblock = tonumber(minetest.settings:get("max_objects_per_block")) * 5
 local enable_particles = true
 local tick_max = 40
 local tick_short_max = 40

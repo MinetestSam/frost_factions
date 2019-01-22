@@ -32,7 +32,7 @@ mobs:register_mob("mobs_animal:cow", {
 	pushable = true,
 	drops = {
 		{name = "mobs:meat_raw", chance = 1, min = 1, max = 3},
-		{name = "mobs:leather", chance = 1, min = 0, max = 2},
+		{name = "mobs:leather", chance = 1, min = 1, max = 2},
 	},
 	water_damage = 1,
 	lava_damage = 5,
