@@ -82,6 +82,10 @@ if minetest.get_modpath("default") then
 		{"top", "default:chest", "main"},
 		{"bottom", "default:chest", "main"},
 		{"side", "default:chest", "main"},
+		
+		{"top", "default:chest_open", "main"},
+		{"bottom", "default:chest_open", "main"},
+		{"side", "default:chest_open", "main"},
 	
 		{"top", "default:furnace", "dst"},
 		{"bottom", "default:furnace", "src"},
@@ -94,6 +98,10 @@ if minetest.get_modpath("default") then
 		{"top", "default:chest_locked", "main"},
 		{"bottom", "default:chest_locked", "main"},
 		{"side", "default:chest_locked", "main"},
+		
+		{"top", "default:chest_locked_open", "main"},
+		{"bottom", "default:chest_locked_open", "main"},
+		{"side", "default:chest_locked_open", "main"},
 	})
 end
 
