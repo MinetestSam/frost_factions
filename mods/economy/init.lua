@@ -130,6 +130,7 @@ economy.itemprices_pr={
 	["mobs:mutton_cooked"] = 20,
 	["mobs:pork_cooked"] = 24,
 	["mobs:rat_cooked"] = 13,
+	["farming:string"] = 3,
 }
 
 economy.itemprices={}
@@ -1143,6 +1144,3 @@ core.register_chatcommand("blc", {
 		return true
 	end,
 })
-
-
-
