@@ -101,9 +101,10 @@ local function exhaust_player(player, v)
 end
 
 -- Sprint settings and function
-local enable_sprint = false
-local enable_sprint_particles = false
+local enable_sprint = true
+local enable_sprint_particles = true
 local armor_mod = minetest.get_modpath("3d_armor")
+local players = {}
 
 function set_sprinting(name, sprinting)
 	local player = minetest.get_player_by_name(name)
@@ -123,6 +124,20 @@ function set_sprinting(name, sprinting)
 
 		def.speed = def.speed + SPRINT_SPEED
 		def.jump = def.jump + SPRINT_JUMP
+		
+		if player:hud_get_flags().wielditem then
+			local privs = minetest.get_player_privs(name)
+			privs.interact = nil
+			minetest.set_player_privs(name, privs)
+			player:hud_set_flags({wielditem = false})
+		end
+	else
+		minetest.after(0.2, function()
+			local privs = minetest.get_player_privs(name)
+			privs.interact = true
+			minetest.set_player_privs(name, privs)
+			player:hud_set_flags({wielditem = true})
+		end)
 	end
 
 	player:set_physics_override({
@@ -162,8 +177,11 @@ local function stamina_step()
 				if controls.aux1 and controls.up
 				and not minetest.check_player_privs(player, {fast = true})
 				and get_int_attribute(player, "stamina:level") > 6 then
-
-					set_sprinting(name, true)
+					local ply = players[name]
+					if ply and not ply.sprinting then
+						players[name].sprinting = true
+						set_sprinting(name, true)
+					end
 
 					-- create particles behind player when sprinting
 					if enable_sprint_particles then
@@ -199,7 +217,11 @@ local function stamina_step()
 					local level = get_int_attribute(player, "stamina:level")
 					stamina_update_level(player, level - (SPRINT_DRAIN * STAMINA_MOVE_TICK))
 				else
-					set_sprinting(name, false)
+					local ply = players[name]
+					if ply and ply.sprinting then
+						players[name].sprinting = false
+						set_sprinting(name, false)
+					end
 				end
 			end
 			-- END sprint
@@ -244,6 +266,19 @@ local function stamina_step()
 	end
 	minetest.after(0.5, stamina_step)
 end
+
+minetest.register_on_joinplayer(function(player)
+	local name = player:get_player_name()
+	players[name] = {sprinting = false}
+end)
+
+minetest.register_on_leaveplayer(function(player)
+	local name = player:get_player_name()
+	local privs = minetest.get_player_privs(name)
+	privs.interact = true
+	minetest.set_player_privs(name, privs)
+	players[name] = nil
+end)
 
 local function poison_player(ticks, time, elapsed, user)
 	if elapsed <= ticks then
