@@ -1,0 +1,26 @@
+<1...23> =
+<breath> =
+<hearts> =
+<hp> =
+Allows player to set own gravity, jump height and movement speed with /setgravity, /setjump and /setspeed, respectively =
+Allows player to set own health and breath with /sethp, /sethealth and /setbreath =
+Allows player to set the number of slots of the hotbar with /sethotbarsize =
+Destroys all items in your player inventory and crafting grid =
+Kills yourself =
+Number of slots is out of bounds. The number of slots must be between 1 and 23. =
+Sets the size of your hotbar to the provided number of slots; the number must be between 1 and 23 =
+Sets your breath to <breath> breath points =
+Sets your gravity to <gravity> (default: 1) =
+Sets your health to <hearts> hearts =
+Sets your health to <hp> HP (\=half the number of “hearts”) =
+Sets your jump height to <jump height> (default: 1) =
+Sets your movement speed to <speed> (default: 1) =
+Shows your IP address =
+Shows your player name =
+This is not a number. =
+You did not specify the parameter. =
+Your IP address is @1. =
+Your player name is @1. =
+[<gravity>] =
+[<jump height>] =
+[<speed>] =

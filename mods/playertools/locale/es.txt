@@ -1,0 +1,26 @@
+#<1...23> =
+<breath> = <aliento>
+<hearts> = <corazones>
+<hp> = <ps>
+Allows player to set own gravity, jump height and movement speed with /setgravity, /setjump and /setspeed, respectively = Permite al jugador establecer su propia gravedad, altura del salto y velocidad de movimiento con /setgravity, /setjump y /setspeed, respectivamente
+Allows player to set own health and breath with /sethp, /sethealth and /setbreath = Permite al jugador establecer su propia salud y aliento con /sethp, /sethealth y /setbreath
+Allows player to set the number of slots of the hotbar with /sethotbarsize = Permite al jugador establecer el número de ranuras en la barra rápida con /sethotbarsize
+Destroys all items in your player inventory and crafting grid = Destruye todos los objetos en tu inventario y cuadrícula de elaboración
+Kills yourself = Te mata a tí mismo
+Number of slots is out of bounds. The number of slots must be between 1 and 23. = El número de ranuras está fuera de los límites. El número de ranuras debe ser entre 1 y 23.
+Sets the size of your hotbar to the provided number of slots; the number must be between 1 and 23 = Establece el tamaño de tu barra rápida al número especificado de ranuras; el número debe estar entre 1 y 23
+Sets your breath to <breath> breath points = Establece tu aliento a <aliento> puntos de aliento
+Sets your gravity to <gravity> (default: 1) = Establece tu gravedad a <gravedad> (por defecto: 1)
+Sets your health to <hearts> hearts = Establece tu salud a <corazones> corazones
+Sets your health to <hp> HP (\=half the number of “hearts”) = Establece tu salud a <ps> PS (Puntos de Salud \= mitades de corazón)
+Sets your jump height to <jump height> (default: 1) = Establece la altura del salto a <altura de salto> (por defecto: 1)
+Sets your movement speed to <speed> (default: 1) = Establece tu velocidad de movimiento a <velocidad> (por defecto: 1)
+Shows your IP address = Muestra tu dirección IP
+Shows your player name = Muestra tu nombre de jugador
+This is not a number. = Ese no es un número.
+You did not specify the parameter. = No especificaste un parámetro.
+Your IP address is @1. = Tu dirección IP es @1.
+Your player name is @1. = Tu nombre de jugador es @1.
+[<gravity>] = [<gravedad>]
+[<jump height>] = [<altura de salto>]
+[<speed>] = [<velocidad>]
