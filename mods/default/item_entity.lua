@@ -56,6 +56,9 @@ local item = {
 		local p = object:getpos()
 		p.y = p.y - 0.5
 		local node = core.get_node_or_nil(p)
+		if node == nil then
+			return
+		end
 		local name = node.name
 		-- Delete in 'ignore' nodes
 		if node and name == "ignore" then

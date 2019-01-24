@@ -1,8 +1,13 @@
 -- table to hold registered explosive materials.
 local explosive_materials = {}
+
 -- functions
-drop_and_blowup = function(pos,removeifvolatile)
-	local node = minetest.registered_nodes[minetest.get_node_or_nil(pos).name]
+drop_and_blowup = function(pos, removeifvolatile)
+	local n = minetest.get_node_or_nil(pos)
+	if n == nil then
+		return
+	end
+	local node = minetest.registered_nodes[n.name]
 	local olddrops = {}
 	local drops = {}
 	local explodesize = 0
@@ -12,7 +17,7 @@ drop_and_blowup = function(pos,removeifvolatile)
 	if removeifvolatile == false then
 		riv = true
 	end
-	for q,r in pairs(node.inventories) do
+	for q, r in pairs(node.inventories) do
 		default.get_inventory_drops(pos, r, olddrops)
 			for k,v in pairs(olddrops) do
 				found = false
@@ -27,7 +32,7 @@ drop_and_blowup = function(pos,removeifvolatile)
 				end
 			end
 			if found == false then
-				table.insert(drops,v)
+				table.insert(drops, v)
 			end
 		end
 	end
@@ -45,6 +50,7 @@ drop_and_blowup = function(pos,removeifvolatile)
 		end
 	return drops
 end
+
 -- code snippet I found somewhere on the web.
 clone_registered = function(case,name)
 	local params = {}
@@ -61,27 +67,29 @@ clone_registered = function(case,name)
 	end
 	return params
 end
+
 register_explosive_material = function(name,value,trap)
-	table.insert(explosive_materials,{name = name,value = value,trap = trap})
+	table.insert(explosive_materials, {name = name,value = value,trap = trap})
 end
-register_explosive_container = function(name,inventory)
+
+register_explosive_container = function(name, inventory)
 	local node = clone_registered("node",name)
 	node.inventories = inventory
 	node.on_blast = function(pos)
-		return drop_and_blowup(pos,false)
+		return drop_and_blowup(pos, false)
 	end
 	node.on_ignite = function(pos)
-		drop_and_blowup(pos,true)
+		drop_and_blowup(pos, true)
 	end
 	node.mesecons = {effector =
 		{action_on =
 			function(pos)
-				drop_and_blowup(pos,true)
+				drop_and_blowup(pos, true)
 			end
 		}
 	}
 	node.on_burn = function(pos)
-		drop_and_blowup(pos,false)
+		drop_and_blowup(pos, false)
 	end
 	local groups = node.groups
 	if not groups.flammable then
@@ -93,6 +101,7 @@ register_explosive_container = function(name,inventory)
 	node.groups = groups
 	minetest.register_node(":" .. name, node)
 end
+
 register_explosive_trap_container = function(name,def,explosion_size,register_craft)
 	local old_node = minetest.registered_nodes[name]
 	local node = {}
@@ -162,11 +171,12 @@ register_explosive_trap_container = function(name,def,explosion_size,register_cr
 	end
 	node.groups = groups
 	minetest.register_node(def.name, node)
-	register_explosive_material(def.name,explosion_size,nil)
+	register_explosive_material(def.name, explosion_size,nil)
 	if register_craft then
-		register_explosive_trap_craft(name,def.name)
+		register_explosive_trap_craft(name, def.name)
 	end
 end
+
 register_explosive_trap_craft = function(name1,name2)
 	for k,v in pairs(explosive_materials) do
 		local recipe_table = {name1}
