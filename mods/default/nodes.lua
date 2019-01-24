@@ -1854,6 +1854,14 @@ function default.register_chest(name, d)
 			meta:set_string("owner", "")
 			local inv = meta:get_inventory()
 			inv:set_size("main", 8*4)
+			pos.y = pos.y - 1
+			local node = minetest.get_node(pos)
+			local name = node.name
+			if name == "hopper:hopper" or name == "hopper:hopper_side" then
+				meta:set_string("hopper", true)
+			else
+				meta:set_string("hopper", false)
+			end
 		end
 		def.after_place_node = function(pos, placer)
 			local meta = minetest.get_meta(pos)
@@ -1877,6 +1885,14 @@ function default.register_chest(name, d)
 		def.allow_metadata_inventory_put = function(pos, listname, index, stack, player)
 			if not default.can_interact_with_node(player, pos) then
 				return 0
+			end
+			local meta = minetest.get_meta(pos)
+			if meta:get_string("hopper") then
+				pos.y = pos.y - 1
+				local timer = minetest.get_node_timer(pos)
+				if not timer:is_started() then
+					timer:start(1.0)
+				end
 			end
 			return stack:get_count()
 		end
@@ -1951,6 +1967,14 @@ function default.register_chest(name, d)
 			meta:set_string("infotext", "Chest")
 			local inv = meta:get_inventory()
 			inv:set_size("main", 8*4)
+			pos.y = pos.y - 1
+			local node = minetest.get_node(pos)
+			local name = node.name
+			if name == "hopper:hopper" or name == "hopper:hopper_side" then
+				meta:set_string("hopper", true)
+			else
+				meta:set_string("hopper", false)
+			end
 		end
 		def.can_dig = function(pos,player)
 			local meta = minetest.get_meta(pos);
@@ -1989,6 +2013,14 @@ function default.register_chest(name, d)
 		minetest.log("action", player:get_player_name() ..
 			" moves " .. stack:get_name() ..
 			" to chest at " .. minetest.pos_to_string(pos))
+		local meta = minetest.get_meta(pos)
+		if meta:get_string("hopper") then
+			pos.y = pos.y - 1
+			local timer = minetest.get_node_timer(pos)
+			if not timer:is_started() then
+				timer:start(1.0)
+			end
+		end
 	end
 	def.on_metadata_inventory_take = function(pos, listname, index, stack, player)
 		minetest.log("action", player:get_player_name() ..

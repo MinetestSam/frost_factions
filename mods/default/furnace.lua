@@ -246,6 +246,14 @@ local function furnace_node_timer(pos, elapsed)
 	meta:set_float("src_time", src_time)
 	meta:set_string("formspec", formspec)
 	meta:set_string("infotext", infotext)
+	
+	if meta:get_string("hopper") then
+		pos.y = pos.y - 1
+		local timer = minetest.get_node_timer(pos)
+		if not timer:is_started() then
+			timer:start(1.0)
+		end
+	end
 
 	return result
 end
@@ -278,6 +286,15 @@ minetest.register_node("default:furnace", {
 		inv:set_size('src', 1)
 		inv:set_size('fuel', 1)
 		inv:set_size('dst', 4)
+		
+		pos.y = pos.y - 1
+		local node = minetest.get_node(pos)
+		local name = node.name
+		if name == "hopper:hopper" or name == "hopper:hopper_side" then
+			meta:set_string("hopper", true)
+		else
+			meta:set_string("hopper", false)
+		end
 	end,
 
 	on_metadata_inventory_move = function(pos)
@@ -333,5 +350,17 @@ minetest.register_node("default:furnace_active", {
 	allow_metadata_inventory_put = allow_metadata_inventory_put,
 	allow_metadata_inventory_move = allow_metadata_inventory_move,
 	allow_metadata_inventory_take = allow_metadata_inventory_take,
+	
+	on_construct = function(pos)
+		local meta = minetest.get_meta(pos)
+		pos.y = pos.y - 1
+		local node = minetest.get_node(pos)
+		local name = node.name
+		if name == "hopper:hopper" or name == "hopper:hopper_side" then
+			meta:set_string("hopper", true)
+		else
+			meta:set_string("hopper", false)
+		end
+	end
 })
 
