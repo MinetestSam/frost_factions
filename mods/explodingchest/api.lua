@@ -38,9 +38,9 @@ drop_and_blowup = function(pos,removeifvolatile)
 	drops[#drops+1] = node.name
 		if blowup == true then
 			minetest.remove_node(pos)
-			tnt.boom(pos, {radius = explodesize,damage_radius = explodesize * 2})
+			tnt.boom(pos, {radius = explodesize, damage_radius = explodesize * 2})
 			else if riv == true then
-			minetest.remove_node(pos)
+				minetest.remove_node(pos)
 			end
 		end
 	return drops
@@ -169,10 +169,10 @@ register_explosive_trap_container = function(name,def,explosion_size,register_cr
 end
 register_explosive_trap_craft = function(name1,name2)
 	for k,v in pairs(explosive_materials) do
-		recipe_table = {name1}
+		local recipe_table = {name1}
 		if v.trap then
-			for q,r in pairs(v.trap) do
-				table.insert(recipe_table,r)
+			for q, r in pairs(v.trap) do
+				table.insert(recipe_table, r)
 			end
 			minetest.register_craft({
 				output = name2,
