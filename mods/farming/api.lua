@@ -185,6 +185,12 @@ farming.place_seed = function(itemstack, placer, pointed_thing, plantname)
 			and creative.is_enabled_for(player_name)) then
 		itemstack:take_item()
 	end
+	minetest.after(math.random(10, 300), function(pos)
+		local node = minetest.get_node_or_nil(pos)
+		if node ~= nil then
+			farming.handle_growth(pos, node)
+		end
+	end, pt.above)
 	return itemstack
 end
 

@@ -282,7 +282,12 @@ minetest.register_lbm({
 	nodenames = { "group:growing" },
 	run_at_every_load = true,
 	action = function(pos, node)
-		farming.handle_growth(pos, node)
+		minetest.after(math.random(1, 300), function(pos)
+			local node1 = minetest.get_node_or_nil(pos)
+			if node1 ~= nil then
+				farming.handle_growth(pos, node1)
+			end
+		end, pos)
 	end,
 })
 
@@ -476,6 +481,13 @@ function farming.place_seed(itemstack, placer, pointed_thing, plantname)
 				)
 			end
 		end
+		
+		minetest.after(math.random(10, 300), function(pos)
+			local node = minetest.get_node_or_nil(pos)
+			if node ~= nil then
+				farming.handle_growth(pos, node)
+			end
+		end, pt.above)
 
 		return itemstack
 	end
