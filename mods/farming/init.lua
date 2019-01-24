@@ -277,14 +277,13 @@ end)
 
 -- Just in case a growing type or added node is missed (also catches existing
 -- nodes added to map before timers were incorporated).
-minetest.register_abm({
+minetest.register_lbm({
+	name = "farming:growing_lbm",
 	nodenames = { "group:growing" },
-	interval = 300,
-	chance = 1,
-	catch_up = false,
+	run_at_every_load = true,
 	action = function(pos, node)
 		farming.handle_growth(pos, node)
-	end
+	end,
 })
 
 
