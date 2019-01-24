@@ -197,7 +197,6 @@ function unified_inventory.go_home(player)
 		local player = minetest.get_player_by_name(name)
 		minetest.after(5, function(player, name) 
 			if player and tip[name] then
-				minimal_anticheat.whitelist_player(name, 5)
 				player:set_pos(pos)
 			end
 			tip[name] = nil

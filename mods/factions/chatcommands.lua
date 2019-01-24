@@ -289,6 +289,7 @@ factions.register_command("list", {
 --show factions mod version
 factions.register_command("version", {
     description = "Displays mod version.",
+	infaction = false,
     on_success = function(player, faction, pos, parcelpos, args)
         minetest.chat_send_player(player, "factions: version " .. misc_mod_data.data.factions_version , false)
     end
@@ -298,6 +299,7 @@ factions.register_command("version", {
 factions.register_command("info", {
     format = {"faction"},
     description = "Shows a faction's description.",
+	infaction = false,
 	global_privileges = def_global_privileges,
     on_success = function(player, faction, pos, parcelpos, args)
         minetest.chat_send_player(player,
@@ -495,6 +497,7 @@ factions.register_command("ranks", {
 factions.register_command("rank_privileges", {
     description = "List available rank privileges.",
 	global_privileges = def_global_privileges,
+	infaction = false,
     on_success = function(player, faction, pos, parcelpos, args)
 		minetest.chat_send_player(player, "Privileges available:\n")
 		for i, k in pairs(factions.permissions) do
@@ -782,6 +785,7 @@ local parcel_size_center = factions_config.parcel_size / 2
 factions.register_command("show_parcel", {
     description = "Shows parcel for six seconds.",
 	global_privileges = def_global_privileges,
+	infaction = false,
     on_success = function(player, faction, pos, parcelpos, args)
 		local parcel_faction = factions.get_parcel_faction(parcelpos)
 		if not parcel_faction then

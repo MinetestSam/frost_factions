@@ -91,7 +91,6 @@ minetest.register_chatcommand("home", {
 			local player = minetest.get_player_by_name(name)
 			minetest.after(5, function(player, name) 
 				if player and tip[name] then
-					minimal_anticheat.whitelist_player(name, 5)
 					player:set_pos(sethome.get(name)) 
 				end
 				tip[name] = nil

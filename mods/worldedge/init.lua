@@ -130,7 +130,6 @@ local function step()
 					pos = newpos,
 					obj = obj
 				}
-				minimal_anticheat.whitelist_player(name, 60)
 				obj:setpos(newpos)
 			end
 		end

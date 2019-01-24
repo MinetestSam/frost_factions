@@ -22,7 +22,6 @@ minetest.register_chatcommand("spawn", {
 		local player = minetest.get_player_by_name(name)
 		minetest.after(5, function(player, name) 
 			if player and tip[name] then
-				minimal_anticheat.whitelist_player(name, 5)
 				player:set_pos(spawnpos) 
 			end
 			tip[name] = nil
