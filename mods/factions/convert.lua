@@ -25,7 +25,7 @@ function faction_convert()
 		file:close()
 		
 		if tabledata then
-			for facname, faction in pairs(tabledata.factions) do
+			for facname, faction in pairs(tabledata) do
 				factions.factions.set(facname, faction)
 				
 				for player, rank in pairs(faction.players) do
