@@ -1,6 +1,8 @@
 local S = unified_inventory.gettext
 local F = minetest.formspec_escape
 
+homedb = colddb.Colddb("unified_inventory_home")
+
 -- Create detached creative inventory after loading all mods
 minetest.after(0.01, function()
 	local rev_aliases = {}
@@ -155,10 +157,10 @@ end)
 
 
 -- load_home
-local function load_home()
-	local input = io.open(unified_inventory.home_filename, "r")
+local function convert_home()
+	local path = minetest.get_worldpath() .. "/unified_inventory_home.home"
+	local input = io.open(path, "r")
 	if not input then
-		unified_inventory.home_pos = {}
 		return
 	end
 	while true do
@@ -167,28 +169,22 @@ local function load_home()
 		local y = input:read("*n")
 		local z = input:read("*n")
 		local name = input:read("*l")
-		unified_inventory.home_pos[name:sub(2)] = {x = x, y = y, z = z}
+		homedb.set(name:sub(2), {x = x, y = y, z = z})
 	end
 	io.close(input)
+	os.rename(path, minetest.get_worldpath() .. "/unified_inventory_home.home_old")
 end
-load_home()
+convert_home()
 
 function unified_inventory.set_home(player, pos)
-	local player_name = player:get_player_name()
-	unified_inventory.home_pos[player_name] = vector.round(pos)
-	-- save the home data from the table to the file
-	local output = io.open(unified_inventory.home_filename, "w")
-	for k, v in pairs(unified_inventory.home_pos) do
-		output:write(v.x.." "..v.y.." "..v.z.." "..k.."\n")
-	end
-	io.close(output)
+	homedb.set(player:get_player_name(), vector.round(pos))
 end
 
 local tip = {}
 
 function unified_inventory.go_home(player)
 	local name = player:get_player_name()
-	local pos = unified_inventory.home_pos[name]
+	local pos = homedb.get(name)
 	if pos then
 		if tip[name] then
 			minetest.chat_send_player(name, "Your already being teleported!")
