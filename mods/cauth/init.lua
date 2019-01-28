@@ -48,10 +48,6 @@ auth_handler = {
 			privileges = minetest.string_to_privs(minetest.settings:get("default_privs")),
 			last_login = os.time(),
 			normal_name = oldname})
-		
-		minetest.log('info', "cauth adding player '" .. oldname .. "' to index/cauth_index.cold")
-		cauth.open_entry_file("cauth_index", cauth.get_or_add_tag("index", "index"))
-		cauth.append_entry_file("cauth_index", oldname, "value", cauth.get_or_add_tag("index", "index"))
 	end,
 	delete_auth = function(name)
 		assert(type(name) == 'string')
@@ -139,15 +135,10 @@ local function convert_old_auth_file()
 		return
 	end
 	
-	cauth.open_entry_file("cauth_index", cauth.get_or_add_tag("index", "index"))
-	
-	local name_list = {}
-	
 	for line in file:lines() do
 		if line ~= "" then
 			local fields = line:split(":", true)
 			local name, password, privilege_string, last_login = unpack(fields)
-			name_list[#name_list + 1] = name
 			last_login = tonumber(last_login)
 			if name and password and privilege_string then
 				minetest.log('info', "Converted '" .. name .. "' from auth.txt to cauth database.")
@@ -159,8 +150,6 @@ local function convert_old_auth_file()
 			end
 		end
 	end
-	
-	cauth.append_entry_file("cauth_index", name_list, "value", cauth.get_or_add_tag("index", "index"))
 	
 	io.close(file)
 	os.rename(path, minetest.get_worldpath() .. "/auth_old.txt")
