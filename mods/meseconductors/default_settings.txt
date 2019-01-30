@@ -1,0 +1,53 @@
+-- Global configuration variables
+
+
+--highlight all nodes when receiving a mesecon signal, buggy atm
+meseconductors.highlight_conducting = false
+
+-- highlight all conductalbe nodes, useful for debugging, not working yet
+meseconductors.debug_highlight_all = false
+
+--use creative inventory
+--nodes and their recipes can still be viewed in a custom meseconductors-inventory-node (not implemented yet)
+meseconductors.use_creative_inventory = true
+
+--mods
+
+
+--moreblocks
+meseconductors.use_moreblocks = true
+
+--building_blocks
+meseconductors.use_building_blocks = true
+
+--glooptest
+meseconductors.use_glooptest = true
+
+--gloopblocks
+meseconductors.use_gloopblocks = true
+
+--quartz
+meseconductors.use_quartz = true
+
+--moretrees
+meseconductors.use_moretrees = true
+
+--technic
+meseconductors.use_technic = true
+
+--ethereal
+meseconductors.use_ethereal = true
+
+--moreores
+meseconductors.use_moreores = true
+
+--currently not supported
+--castle
+meseconductors.use_castle = false
+
+
+
+
+
+
+
