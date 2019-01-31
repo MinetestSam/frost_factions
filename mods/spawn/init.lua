@@ -63,7 +63,9 @@ local function pvp_block(player, hitter, time_from_last_punch, tool_capabilities
 	local x2 = spawnpos.x
 	local z2 = spawnpos.z
 	
-	if x < x2 + 30 and x > x2 - 30 and z < z2 + 30 and z > z2 - 30 then
+	local size = 52.2
+	
+	if x < x2 + size and x > x2 - size and z < z2 + size and z > z2 - size then
 		local name = hitter:get_player_name()
 		hitter:set_hp(hitter:get_hp() - 0.5)
 		minetest.chat_send_player(name, "You can not kill players on server spawn!")
