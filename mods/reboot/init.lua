@@ -61,3 +61,5 @@ minetest.register_chatcommand("cancelreboot", {
         return true, "Reboot aborted!"
     end
 })
+
+minetest.after(86400, function() reboot = true end)
