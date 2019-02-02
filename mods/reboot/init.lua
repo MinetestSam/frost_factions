@@ -30,6 +30,9 @@ checkReboot = function()
         -- Time to reboot
         if irc then irc.say("The server is empty! Rebooting...") end
         minetest.request_shutdown("Rebooting...", true, 1)
+		return true
+	else
+		return false
     end
 end
 
@@ -62,4 +65,11 @@ minetest.register_chatcommand("cancelreboot", {
     end
 })
 
-minetest.after(86400, function() reboot = true end)
+local function reboot24()
+	reboot = true
+	if not checkReboot then
+		minetest.after(1800, reboot24)
+	end
+end
+
+minetest.after(86400, reboot24)
