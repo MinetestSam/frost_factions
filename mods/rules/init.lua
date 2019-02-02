@@ -14,13 +14,15 @@ local items = {
 	"1. No hacked clients or csm that give you unfair advantage in pvp, building, mining, etc.",
 	"2. Mild cursing/cussing don't curse excesivlly no racial slurs and no cussing anybody out,",
 	"also if anyone asks you to stop please stop while they are online.",
-	"3. No spawn killing if your at someone's bed.",
-	"4. No imperosnating staff.",
-	"5. No dating or dating role playing.",
-	"6. No giving out real world personal information on any player even your self.",
-	"7. Remember your account is yours. You will be held accountable for any action performed",
+	"3. Do not bring drama from outside servers here, please.",
+	"4. No spawn killing if your at someone's bed.",
+	"5. No imperosnating staff.",
+	"6. No dating or dating role playing.",
+	"7. No giving out real world personal information on any player even your self.",
+	"8. Remember your account is yours. You will be held accountable for any action performed",
 	"though this account even for people that you let or did not on your account.",
-	"8. Griefing is allowed but not on server spawn.",
+	"9. Griefing is allowed but not on server spawn.",
+	"10. Do not ask to be staff.",
 	"",
 	"Server staff are walrus, Coder12, Trump"}
 
@@ -75,7 +77,7 @@ minetest.register_on_joinplayer(function(player)
 		rules.show(player)
 	else
 		local name = player:get_player_name()
-		minetest.after(5, minetest.chat_send_player, name, "Hi " .. name .. ". You can review the server rules by typing in /rules")
+		minetest.after(5, minetest.chat_send_player, name, "Hi " .. name .. ". You can review the server rules (updated on 2/2/19 UTC) by typing in /rules")
 	end
 end)
 
