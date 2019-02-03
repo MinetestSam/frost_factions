@@ -26,7 +26,11 @@ local items = {
 	"11. No harassing a player in chat because of their race, gender, country, religion,",
 	"and political beliefs. (You can still attack them in pvp or go to war with them)",
 	"12. No illegal content. (piracy, hacked client download links etc..)",
-	"13. No nsfw content or nsfw chat in-game (Keep it clean kids play here.)",
+	"13. No Pornography chat in-game also if the subject your talking about makes other",
+	"players uncomfortable stop if anyone asks you to.",
+	"14. No spamming chat.",
+	"15. No ban-evading.",
+	"16. Do not try to change accounts when you have been muted in-game.",
 	"",
 	"Server staff are walrus, Coder12, Trump"}
 
