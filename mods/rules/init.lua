@@ -31,6 +31,7 @@ local items = {
 	"14. No spamming chat.",
 	"15. No ban-evading.",
 	"16. Do not try to change accounts when you have been muted in-game.",
+	"17. Do not be rude in-chat to other players.",
 	"",
 	"Server staff are walrus, Coder12, Trump"}
 
@@ -85,7 +86,7 @@ minetest.register_on_joinplayer(function(player)
 		rules.show(player)
 	else
 		local name = player:get_player_name()
-		minetest.after(5, minetest.chat_send_player, name, "Hi " .. name .. ". You can review the server rules (updated on 2/2/19 UTC) by typing in /rules")
+		minetest.after(15, minetest.chat_send_player, name, "Hi " .. name .. ". You can review the server rules (updated on 2/3/19 UTC) by typing in /rules")
 	end
 end)
 
