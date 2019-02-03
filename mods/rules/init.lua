@@ -23,6 +23,10 @@ local items = {
 	"though this account even for people that you let or did not on your account.",
 	"9. Griefing is allowed but not on server spawn.",
 	"10. Do not ask to be staff.",
+	"11. No harassing a player in chat because of their race, gender, country, religion,",
+	"and political beliefs. (You can still attack them in pvp or go to war with them)",
+	"12. No illegal content. (piracy, hacked client download links etc..)",
+	"13. No nsfw content or nsfw chat in-game (Keep it clean kids play here.)",
 	"",
 	"Server staff are walrus, Coder12, Trump"}
 
