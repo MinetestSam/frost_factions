@@ -497,6 +497,34 @@ function colddb.Colddb(dir)
 			table.insert(iterate_queue[cs], _table)
 		end
 	end
+	
+	self.set_mem = function(name, _table, tag_name)
+		local t = ""
+		if tag_name then
+			t = self.get_tag(tag_name)
+		end
+		load_into_mem(name, _table, tag_name)
+		local cs = string.format("%s%s", t, name)
+		mem_pool_del[cs] = nil
+	end
+	
+	self.save_mem = function(name, tag_name)
+		local t = ""
+		
+		if tag_name then
+			t = self.get_tag(tag_name)
+		end
+		
+		local cs = string.format("%s%s", t, name)
+		
+		async.queue_task(function() 
+			if mem_pool[cs] ~= nil then
+				save_table(name, mem_pool[cs].mem, tag_name)
+			end
+		end)
+		
+		mem_pool_del[cs] = nil
+	end
 
 	self.set = function(name, _table, tag_name)
 		local t = ""

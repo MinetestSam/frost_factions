@@ -2,6 +2,8 @@ cauth = colddb.Colddb("cauth")
 
 local directory = string.format("%s/cauth", minetest.get_worldpath())
 
+local players = {}
+
 auth_handler = {
 	get_auth = function(name)
 		assert(type(name) == "string")
@@ -96,7 +98,7 @@ auth_handler = {
 		name = name:lower()
 		local data = cauth.get(name)
 		assert(data).last_login = os.time()
-		cauth.set(name, data)
+		cauth.set_mem(name, data)
 	end,
 	iterate = function()
 		local names = {}
@@ -106,6 +108,33 @@ auth_handler = {
 		return pairs(names)
 	end
 }
+
+minetest.register_on_joinplayer(function(player)
+	players[player:get_player_name():lower()] = true
+end)
+	
+minetest.register_on_leaveplayer(function(player)
+	local name = player:get_player_name():lower()
+	players[name] = nil
+	
+	cauth.save_mem(name)
+end)
+
+minetest.register_on_shutdown(function()
+	for k, v in pairs(players) do
+		cauth.save_mem(k)
+	end
+end)
+
+local function save_tick()
+	for k, v in pairs(players) do
+		cauth.save_mem(k)
+	end
+	
+	minetest.after(30, save_tick)
+end
+
+minetest.after(30, save_tick)
 
 minetest.register_authentication_handler(auth_handler)
 
