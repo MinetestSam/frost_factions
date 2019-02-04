@@ -11,7 +11,12 @@ minetest.register_tool("bow:wood_bow", {
 		minetest.item_drop(itemstack, dropper, pos)
 		return ""
 	end,
-	range = 0
+	tool_capabilities = {
+		full_punch_interval = 0.8,
+		max_drop_level=1,
+		groupcaps={},
+		damage_groups = {},
+	},
 })
 
 minetest.register_tool("bow:wood_bow_1", {
