@@ -100,6 +100,7 @@ economy.itemprices_pr={
 	["farming:rhubarb"] = 2,
 	["farming:tomato"] = 2,
 	["spawners_mobs:mobs_chicken_spawner"] = 10300,
+	["spawners_mobs:mobs_dirt_monster_spawner"] = 12500,
 	["spawners_mobs:mobs_cow_spawner"] = 10600,
 	["spawners_mobs:mobs_oerkki_spawner"] = 900000,
 	["spawners_mobs:mobs_pumba_spawner"] = 10000,
