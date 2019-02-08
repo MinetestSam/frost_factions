@@ -129,11 +129,6 @@ function spawners_mobs.tick(pos)
 
 	-- print("tick_counter: "..tick_counter.." at "..minetest.pos_to_string(pos))
 
-	-- rusty spawner
-	if tick_counter >= tick_max then
-		spawners_mobs.set_status(pos, "rusty")
-		return
-	end
 	minetest.get_node_timer(pos):start(math.random(72, 193))
 	-- minetest.get_node_timer(pos):start(math.random(20, 30))
 end
