@@ -3,3 +3,4 @@ doors?
 spawn
 xdecor?
 colddb
+ts_doors?
