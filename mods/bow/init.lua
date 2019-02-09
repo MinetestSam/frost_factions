@@ -17,6 +17,7 @@ minetest.register_tool("bow:wood_bow", {
 		groupcaps={},
 		damage_groups = {},
 	},
+	range = 4
 })
 
 minetest.register_tool("bow:wood_bow_1", {
