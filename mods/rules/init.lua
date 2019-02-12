@@ -33,7 +33,7 @@ local items = {
 	"16. Do not try to change accounts when you have been muted in-game.",
 	"17. Do not be rude in-chat to other players.",
 	"",
-	"Server staff are walrus, Coder12, Trump"}
+	"Server staff are walrus, Coder12"}
 
 for i = 1, #items do
 	items[i] = minetest.formspec_escape(items[i])
