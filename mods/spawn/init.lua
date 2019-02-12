@@ -51,6 +51,10 @@ minetest.register_on_leaveplayer(
 	end
 )
 
+minetest.register_on_newplayer(function(player) 
+	player:set_pos(spawnpos) 
+end)
+
 local function pvp_block(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
 	if not player or not hitter or not player:is_player() or not hitter:is_player() then
 		return
