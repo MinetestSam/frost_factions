@@ -4,9 +4,9 @@ local S = armor_i18n.gettext
 armor:register_armor("3d_armor:helmet_admin", {
 	description = S("Admin Helmet"),
 	inventory_image = "3d_armor_inv_helmet_admin.png",
-	armor_groups = {fleshy=100},
-	groups = {armor_head=1, armor_heal=100, armor_use=0, armor_water=1,
-			not_in_creative_inventory=1},
+	groups = {armor_head=1, armor_heal=12, armor_use=200, not_in_creative_inventory = 1},
+	armor_groups = {fleshy=15},
+	damage_groups = {cracky=2, snappy=1, choppy=1, level=3},
 	on_drop = function(itemstack, dropper, pos)
 		return
 	end,
@@ -15,9 +15,9 @@ armor:register_armor("3d_armor:helmet_admin", {
 armor:register_armor("3d_armor:chestplate_admin", {
 	description = S("Admin Chestplate"),
 	inventory_image = "3d_armor_inv_chestplate_admin.png",
-	armor_groups = {fleshy=100},
-	groups = {armor_torso=1, armor_heal=100, armor_use=0,
-			not_in_creative_inventory=1},
+	groups = {armor_torso=1, armor_heal=12, armor_use=200, not_in_creative_inventory = 1},
+	armor_groups = {fleshy=20},
+	damage_groups = {cracky=2, snappy=1, choppy=1, level=3},
 	on_drop = function(itemstack, dropper, pos)
 		return
 	end,
@@ -26,9 +26,9 @@ armor:register_armor("3d_armor:chestplate_admin", {
 armor:register_armor("3d_armor:leggings_admin", {
 	description = S("Admin Leggings"),
 	inventory_image = "3d_armor_inv_leggings_admin.png",
-	armor_groups = {fleshy=100},
-	groups = {armor_legs=1, armor_heal=100, armor_use=0,
-			not_in_creative_inventory=1},
+	groups = {armor_legs=1, armor_heal=12, armor_use=200, not_in_creative_inventory = 1},
+	armor_groups = {fleshy=20},
+	damage_groups = {cracky=2, snappy=1, choppy=1, level=3},
 	on_drop = function(itemstack, dropper, pos)
 		return
 	end,
@@ -37,9 +37,9 @@ armor:register_armor("3d_armor:leggings_admin", {
 armor:register_armor("3d_armor:boots_admin", {
 	description = S("Admin Boots"),
 	inventory_image = "3d_armor_inv_boots_admin.png",
-	armor_groups = {fleshy=100},
-	groups = {armor_feet=1, armor_heal=100, armor_use=0,
-			not_in_creative_inventory=1},
+	groups = {armor_feet=1, armor_heal=12, armor_use=200, not_in_creative_inventory = 1},
+	armor_groups = {fleshy=15},
+	damage_groups = {cracky=2, snappy=1, choppy=1, level=3},
 	on_drop = function(itemstack, dropper, pos)
 		return
 	end,
