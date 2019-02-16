@@ -678,7 +678,7 @@ function tnt.register_tnt(def)
 						MaxEdge = emax
 					}
 				
-				local data = vm:get_data()
+					local data = vm:get_data()
 				
 					local vr = vector.round({x = pos.x, y = pos.y, z = pos.z})
 					local n0 = data[a:index(vr.x, vr.y, vr.z)]
@@ -756,7 +756,7 @@ function tnt.register_tnt(def)
 			
 			local dist = math.max(1.0, vector.distance(blaster, pos))
 			local dir = vector.normalize(vector.subtract(pos, blaster))
-			local moveoff = vector.multiply(dir, (intensity * 2.0) / dist)
+			local moveoff = vector.multiply(dir, intensity  / dist)
 			
 			local obj = minetest.env:add_entity(pos, name .. "_flying")
 			obj:get_luaentity().meta = {time = mtime}
