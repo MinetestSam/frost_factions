@@ -122,45 +122,37 @@ register_explosive_trap_container = function(name,def,explosion_size,register_cr
 	node.on_construct = old_node.on_construct
 	node.on_rightclick = function(pos, node_arg, clicker)
 		if minetest.get_node_or_nil(pos) then
-			local node2 = minetest.registered_nodes[node_arg.name]
-			local explodesize = node2.explosion_size
-			minetest.remove_node(pos)
+			local explodesize = 4
 			tnt.boom(pos, {radius = explodesize,damage_radius = explodesize * 2})
 		end
 	end
 	node.on_blast = function(pos)
-		local n = minetest.get_node_or_nil(pos)
-		if n then
-			local node2 = minetest.registered_nodes[n.name]
-			local explodesize = node2.explosion_size
-			minetest.remove_node(pos)
+		if minetest.get_node_or_nil(pos) then
+			local explodesize = 4
 			tnt.boom(pos, {radius = explodesize,damage_radius = explodesize * 2})
 		end
 	end
 	node.on_ignite = function(pos)
-		local n = minetest.get_node_or_nil(pos)
-		if n then
-			local node2 = minetest.registered_nodes[n.name]
-			local explodesize = node2.explosion_size
-			minetest.remove_node(pos)
+		if minetest.get_node_or_nil(pos) then
+			local explodesize = 4
 			tnt.boom(pos, {radius = explodesize,damage_radius = explodesize * 2})
 		end
 	end
 	node.mesecons = {effector =
 		{action_on =
 			function(pos)
-				local n = minetest.get_node_or_nil(pos)
-				if n then
-					local node2 = minetest.registered_nodes[n.name]
-					local explodesize = node2.explosion_size
-					minetest.remove_node(pos)
+				if minetest.get_node_or_nil(pos) then
+					local explodesize = 4
 					tnt.boom(pos, {radius = explodesize,damage_radius = explodesize * 2})
 				end
 			end
 		}
 	}
 	node.on_burn = function(pos)
-		drop_and_blowup(pos,false)
+		if minetest.get_node_or_nil(pos) then
+			local explodesize = 4
+			tnt.boom(pos, {radius = explodesize,damage_radius = explodesize * 2})
+		end
 	end
 	local groups = old_node.groups
 	if not groups.flammable then
