@@ -12,11 +12,11 @@ local items = {
 	"By playing on this server you agree to these rules:",
 	"",
 	"1. No hacked clients or csm that give you unfair advantage in pvp, building, mining, etc.",
-	"2. Mild cursing/cussing don't curse excesivlly no racial slurs and no cussing anybody out,",
+	"2. Mild cursing/cussing don't curse excessively no racial slurs and no cussing anybody out,",
 	"also if anyone asks you to stop please stop while they are online.",
 	"3. Do not bring drama from outside servers here, please.",
-	"4. No spawn killing if your at someone's bed.",
-	"5. No imperosnating staff.",
+	"4. No spawn killing if your at faction's spawn point (Its okay to if its a enemy spawn on your land)",
+	"5. No impersonating staff or known players.",
 	"6. No dating or dating role playing.",
 	"7. No giving out real world personal information on any player even your self.",
 	"8. Remember your account is yours. You will be held accountable for any action performed",
@@ -26,7 +26,7 @@ local items = {
 	"11. No harassing a player in chat because of their race, gender, country, religion,",
 	"and political beliefs. (You can still attack them in pvp or go to war with them)",
 	"12. No illegal content. (piracy, hacked client download links etc..)",
-	"13. No Pornography chat in-game also if the subject your talking about makes other",
+	"13. No Pornography, innuendo chat on the server also if the subject your talking about makes other ",
 	"players uncomfortable stop if anyone asks you to.",
 	"14. No spamming chat.",
 	"15. No ban-evading.",
@@ -46,10 +46,10 @@ local function can_grant_interact(player)
 end
 
 function rules.show(player)
-	local fs = "size[8,7]bgcolor[#080808BB;true]" ..
+	local fs = "size[9,7]bgcolor[#080808BB;true]" ..
 			default.gui_bg ..
 			default.gui_bg_img ..
-			"textlist[0.1,0.1;7.8,6.3;msg;" .. rules.txt .. ";-1;true]"
+			"textlist[0.1,0.1;8.8,6.3;msg;" .. rules.txt .. ";-1;true]"
 
 	if not can_grant_interact(player) then
 		fs = fs .. "button_exit[0.5,6;7,2;yes;Okay]"
