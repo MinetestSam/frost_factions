@@ -153,7 +153,7 @@ local health_timer = 0
 local action_timer = 0
 
 local function stamina_step()
-	local dtime = 0.5
+	local dtime = 0.1
 	stamina_timer = stamina_timer + dtime
 	health_timer = health_timer + dtime
 	action_timer = action_timer + dtime
@@ -264,7 +264,7 @@ local function stamina_step()
 
 		health_timer = 0
 	end
-	minetest.after(0.5, stamina_step)
+	minetest.after(0.1, stamina_step)
 end
 
 minetest.register_on_joinplayer(function(player)
