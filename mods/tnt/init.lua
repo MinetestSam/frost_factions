@@ -661,6 +661,24 @@ function tnt.register_tnt(def)
 		on_step = function(self, dtime)
 			self.timer = self.timer + dtime
 			self.bomb_timer = self.bomb_timer + dtime
+			if self.timer >= 0.1 then
+				-- Friction code copied from https://github.com/kaeza/minetest-soccer
+				local vel = self.object:get_velocity()
+				local p = self.object:get_pos()
+				p.y = p.y - 1
+				if minetest.registered_nodes[minetest.env:get_node(p).name].walkable then
+					vel.x = vel.x / 1.9
+					vel.z = vel.z / 1.9
+				end
+				if  (math.abs(vel.x) < 0.1)
+				 and (math.abs(vel.z) < 0.1) then
+					vel.x = 0
+					vel.z = 0
+				end
+				self.object:set_velocity(vel)
+				self.timer = 0
+			end
+			
 			if self.bomb_timer >= 1.0 then
 				local t = self.meta.time
 				if t and t < 1 then
