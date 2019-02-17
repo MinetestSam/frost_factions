@@ -616,8 +616,7 @@ function tnt.register_tnt(def)
 			end,
 			on_blast = function(pos, intensity)
 				minetest.after(0.1, function()
-					minetest.swap_node(pos, {name = name .. "_burning"})
-					minetest.registered_nodes[name .. "_burning"].on_construct(pos)
+					tnt.boom(pos, def)
 				end)
 			end,
 			mesecons = {effector =
@@ -644,6 +643,7 @@ function tnt.register_tnt(def)
 	local c_water_flowing = minetest.get_content_id("default:water_flowing")
 	local c_lava_source = minetest.get_content_id("default:lava_source")
 	local c_lava_flowing = minetest.get_content_id("default:lava_flowing")
+	local c_tnt_boom = minetest.get_content_id("tnt:boom")
 	
 	minetest.register_entity(name .. "_flying", {
 		name = name .. "_flying",
@@ -682,7 +682,7 @@ function tnt.register_tnt(def)
 				
 					local vr = vector.round({x = pos.x, y = pos.y, z = pos.z})
 					local n0 = data[a:index(vr.x, vr.y, vr.z)]
-					if n0 == c_water_source or n0 == c_water_flowing or n0 == c_lava_source or n0 == c_lava_flowing then
+					if n0 == c_water_source or n0 == c_water_flowing or n0 == c_lava_source or n0 == c_lava_flowing or n0 == c_tnt_boom then
 						def.in_water = true
 					end
 					self.object:remove()
