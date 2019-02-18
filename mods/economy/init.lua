@@ -145,55 +145,32 @@ minetest.after(0, function()
 	end
 end)
 
-economy.balance={}
-economy.accountlog={}
+local file, err = io.open(minetest.get_worldpath() .. "/economy", "r")
+local deserialize = nil
 
---[[
-	save version history:
-	{balance=economy.balance, accountlog=economy.accountlog, version=1}
-]]
-
-economy.fpath=minetest.get_worldpath().."/economy"
-local file, err = io.open(economy.fpath, "r")
-if not file then
-	economy.balance = economy.balance or {}
-	local er=err or "Unknown Error"
-	print("[economy]Failed loading economy save file "..er)
-else
-	local deserialize=minetest.deserialize(file:read("*a"))
-	economy.balance = deserialize.balance or deserialize
-	economy.accountlog = deserialize.accountlog or {}
-	if type(economy.balance) ~= "table" then
-		economy.balance={}
-	end
-	if type(economy.accountlog) ~= "table" then
-		economy.balance={}
-	end
+if file then
+	deserialize = minetest.deserialize(file:read("*a"))
 	file:close()
+	os.rename(minetest.get_worldpath() .. "/economy", minetest.get_worldpath() .. "/economyold")
 end
 
+economy.balance = colddb.Colddb("economy/balance")
+economy.accountlog = colddb.Colddb("economy/accountlog")
 
-economy.save = function()
-local datastr = minetest.serialize({balance=economy.balance, accountlog=economy.accountlog, version=1})
-if not datastr then
-	minetest.log("error", "[economy] Failed to serialize balance data!")
-	return
+if deserialize then
+	if deserialize.balance then
+		for k, v in pairs(deserialize.balance) do
+			economy.balance.set(k, v)
+		end
+	end
+	
+	if deserialize.accountlog then
+		for k, v in pairs(deserialize.accountlog) do
+			economy.accountlog.set(k, v)
+		end
+	end
+	deserialize = nil
 end
-local file, err = io.open(economy.fpath, "w")
-if err then
-	return err
-end
-file:write(datastr)
-file:close()
-end
-
---economy after timer
-local function step()
-	economy.save()
-	minetest.after(10, step)
-end
-
-step()
 
 local svm_cbox = {
 	type = "fixed",
@@ -395,45 +372,49 @@ economy.pname=function(player_or_name)
 end
 economy.deposit=function(player, amount, reason)
 	local pname=economy.pname(player)
-	if not economy.balance[pname] then
-		economy.balance[pname]=0
+	if not economy.balance.get(pname) then
+		economy.balance.set(pname, 0)
 	end
-	economy.balance[pname]=economy.balance[pname]+amount
-	if not economy.accountlog[pname] then
-		economy.accountlog[pname]={}
+	economy.balance.set(pname, economy.balance.get(pname) + amount)
+	if not economy.accountlog.get(pname) then
+		economy.accountlog.set(pname, {})
 	end
-	table.insert(economy.accountlog[pname], 1, {action=reason or S("Unknown deposition"), amount="+ "..amount})
+	local aldb = economy.accountlog.get(pname)
+	table.insert(aldb, 1, {action = reason or S("Unknown deposition"), amount="+ "..amount})
+	economy.accountlog.set(pname, aldb)
 end
 economy.moneyof=function(player)
 	local pname=economy.pname(player)
-	if not economy.balance[pname] then
-		economy.balance[pname]=0
+	if not economy.balance.get(pname) then
+		economy.balance.set(pname, 0)
 	end
-	return economy.balance[pname]
+	return economy.balance.get(pname)
 end
 economy.canpay=function(player, amount)
 	local pname=economy.pname(player)
-	if not economy.balance[pname] then
-		economy.balance[pname]=0
+	if not economy.balance.get(pname) then
+		economy.balance.set(pname, 0)
 	end
-	return economy.balance[pname]>=amount
+	return economy.balance.get(pname) >= amount
 end
 economy.buyprice=function(sellprice)
 	return math.ceil(sellprice*1.2)
 end
 economy.withdraw=function(player, amount, reason)
 	local pname=economy.pname(player)
-	if not economy.balance[pname] then
-		economy.balance[pname]=0
+	if not economy.balance.get(pname) then
+		economy.balance.set(pname, 0)
 	end
 	if not economy.canpay(player, amount) then
 		return false
 	end
-	economy.balance[pname]=economy.balance[pname]-amount
-	if not economy.accountlog[pname] then
-		economy.accountlog[pname]={}
+	economy.balance.set(pname, economy.balance.get(pname) - amount)
+	if not economy.accountlog.get(pname) then
+		economy.accountlog.set(pname, {})
 	end
-	table.insert(economy.accountlog[pname], 1, {action=reason or S("Unknown withdrawal"), amount="- "..amount})
+	local aldb = economy.accountlog.get(pname)
+	table.insert(aldb, 1, {action=reason or S("Unknown withdrawal"), amount="- "..amount})
+	economy.accountlog.set(pname, aldb)
 	return true
 end
 economy.itemdesc=function(iname)
@@ -1005,8 +986,8 @@ economy.formspecs={
 	bank={
 		open=function(player, trans_sum, trans_player, trans_complete, trans_fail)
 		local log_form="label[0.5,5.5;"..S("Nothing to show").."]"
-		if economy.accountlog[economy.pname(player)] then
-			local acc=economy.accountlog[economy.pname(player)]
+		if economy.accountlog.get(economy.pname(player)) then
+			local acc=economy.accountlog.get(economy.pname(player))
 			log_form=
 			(acc[1] and "label[0.5,5;"..acc[1].action.."]label[6,5;"..acc[1].amount.." ŧ]" or "")..
 			(acc[2] and "label[0.5,5.5;"..acc[2].action.."]label[6,5.5;"..acc[2].amount.." ŧ]" or "")..
@@ -1030,7 +1011,7 @@ economy.formspecs={
 		hdlr=function(player, restformname, fields)
 		if fields.trans then
 			if fields.sum and tonumber(fields.sum) and tonumber(fields.sum)>0 and economy.canpay(player, tonumber(fields.sum))
-			and fields.plr and economy.balance[fields.plr] then
+			and fields.plr and economy.balance.get(fields.plr) then
 				
 				economy.withdraw(player, tonumber(fields.sum), S("Transfer to @1",fields.plr))
 				economy.deposit(fields.plr, tonumber(fields.sum), S("Transfer from @1",economy.pname(player)))
@@ -1090,14 +1071,14 @@ core.register_chatcommand("dps", {
 	privs = {economy_admin=true},
 	func = function(name, param)
 		local plr, amt, rsn=string.match(param, "(%S+) (%d+) (.+)")
-		if plr and amt and rsn and economy.balance[plr] and tonumber(amt) then
+		if plr and amt and rsn and economy.balance.get(plr) and tonumber(amt) then
 			economy.deposit(plr, amt, rsn)
-			return true, "Successfully deposited "..amt.."ŧ on "..plr.."'s account. "..plr.." has now "..economy.balance[plr].."ŧ."
+			return true, "Successfully deposited "..amt.."ŧ on "..plr.."'s account. "..plr.." has now "..economy.balance.get(plr).."ŧ."
 		end
 		local plr, amt=string.match(param, "(%S+) (%d+)")
-		if plr and amt and economy.balance[plr] and tonumber(amt) then
+		if plr and amt and economy.balance.get(plr) and tonumber(amt) then
 			economy.deposit(plr, amt, S("Administrative deposition").." ("..name..")")
-			return true, "Successfully deposited "..amt.."ŧ on "..plr.."'s account. "..plr.." has now "..economy.balance[plr].."ŧ."
+			return true, "Successfully deposited "..amt.."ŧ on "..plr.."'s account. "..plr.." has now "..economy.balance.get(plr).."ŧ."
 		end
 		return false, "Failed running command. Check syntax and player existence."
 	end,
@@ -1108,21 +1089,21 @@ core.register_chatcommand("wdr", {
 	privs = {economy_admin=true},
 	func = function(name, param)
 		local plr, amt, rsn=string.match(param, "(%S+) (%d+) (.+)")
-		if plr and amt and rsn and economy.balance[plr] and tonumber(amt) then
+		if plr and amt and rsn and economy.balance.get(plr) and tonumber(amt) then
 			local res=economy.withdraw(plr, amt+0, rsn)
 			if res then
-				return true, "Successfully witdrawn "..amt.."ŧ from "..plr.."'s account. "..plr.." has now "..economy.balance[plr].."ŧ."
+				return true, "Successfully witdrawn "..amt.."ŧ from "..plr.."'s account. "..plr.." has now "..economy.balance.get(plr).."ŧ."
 			else
-				return false, "Can't withdraw "..amt.."ŧ from "..plr.."'s account. "..plr.." has only "..economy.balance[plr].."ŧ."
+				return false, "Can't withdraw "..amt.."ŧ from "..plr.."'s account. "..plr.." has only "..economy.balance.get(plr).."ŧ."
 			end
 		end
 		local plr, amt=string.match(param, "(%S+) (%d+)")
-		if plr and amt and economy.balance[plr] and tonumber(amt) then
+		if plr and amt and economy.balance.get(plr) and tonumber(amt) then
 			local res=economy.withdraw(plr, amt+0, S("Administrative withdrawal").." ("..name..")")
 			if res then
-				return true, "Successfully witdrawn "..amt.."ŧ from "..plr.."'s account. "..plr.." has now "..economy.balance[plr].."ŧ."
+				return true, "Successfully witdrawn "..amt.."ŧ from "..plr.."'s account. "..plr.." has now "..economy.balance.get(plr).."ŧ."
 			else
-				return false, "Can't withdraw "..amt.."ŧ from "..plr.."'s account. "..plr.." has only "..economy.balance[plr].."ŧ."
+				return false, "Can't withdraw "..amt.."ŧ from "..plr.."'s account. "..plr.." has only "..economy.balance.get(plr).."ŧ."
 			end
 		end
 		return false, "Failed running command. Check syntax and player existence."
@@ -1134,13 +1115,15 @@ core.register_chatcommand("blc", {
 	privs = {economy_admin=true},
 	func = function(name, param)
 		if param~="" then
-			if economy.balance[param] then
-				return true, param.." has "..economy.balance[param].."ŧ."
+			if economy.balance.get(param) then
+				return true, param.." has "..economy.balance.get(param).."ŧ."
 			end
 			return false, "Failed running command. Check syntax and player existence."
 		end
-		for plr, amt in pairs(economy.balance) do
-			minetest.chat_send_player(name, plr..": "..amt.."ŧ")
+		for k, v in pairs(minetest.get_dir_list(minetest.get_worldpath() .. "/economy/balance")) do
+			local n = v:sub(0, v:len() - 5)
+			local amt = economy.balance.get(n)
+			minetest.chat_send_player(name, n..": "..amt.."ŧ")
 		end
 		return true
 	end,
