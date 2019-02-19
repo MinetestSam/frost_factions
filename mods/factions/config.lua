@@ -1,6 +1,6 @@
 factions_config = {}
 factions_config.protection_max_depth = -200
-factions_config.protection_max_height = 10000
+factions_config.protection_max_height = 500
 factions_config.power_per_parcel = 1
 factions_config.power_per_death = 2
 factions_config.power_per_tick = 2
