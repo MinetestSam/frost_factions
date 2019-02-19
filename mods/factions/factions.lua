@@ -1205,6 +1205,10 @@ minetest.register_on_leaveplayer(
 			if hud_ids[id_name3] then
 				hud_ids[id_name3] = nil
 			end
+			for k, v in pairs(factions.onlineplayers[facname]) do
+				return
+			end
+			factions.onlineplayers[facname] = nil
 		end
 	end
 )

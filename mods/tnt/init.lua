@@ -88,7 +88,7 @@ local function destroy(drops, npos, cid, c_air, c_fire,
 	local x = npos.x
 	local z = npos.z
 	local limit = spawnpos
-			
+	
 	if x < limit.x + 150 and x > limit.x - 150 and z < limit.z + 150 and z > limit.z - 150 then
 		return cid
 	end
@@ -298,6 +298,25 @@ local function tnt_explode(pos, radius, ignore_protection, ignore_on_blast, owne
 		in_water = false
 	end
 	
+	local parcel_faction = factions.get_faction_at(pos)
+	
+	local player_faction, facname = factions.get_player_faction(owner)
+	
+	local online = false
+	
+	if parcel_faction and factions.onlineplayers[parcel_faction.name] ~= nil then
+		for k, v in pairs(factions.onlineplayers[parcel_faction.name]) do
+			online = true
+			break
+		end
+	elseif not parcel_faction then
+		online = true
+	end
+	
+	if in_water == false and parcel_faction and (player_faction == nil or parcel_faction.name ~= facname) and online == false and parcel_faction.power > 0 then
+		in_water = true
+	end
+	
 	-- make sure we still have explosion even when centre node isnt tnt related
 	if explode_center then
 		count = 1
@@ -406,6 +425,9 @@ function tnt.boom(pos, def)
 	if not def.explode_center then
 		minetest.set_node(pos, {name = "tnt:boom"})
 	end
+	if owner == nil then
+		owner = def.owner
+	end	
 	minetest.sound_play("tnt_explode", {pos = pos, gain = 1.5, max_hear_distance = 2*64})
 	local drops, radius = tnt_explode(pos, def.radius, def.ignore_protection,
 			def.ignore_on_blast, owner, def.explode_center, def.in_water)
@@ -704,7 +726,9 @@ function tnt.register_tnt(def)
 						def.in_water = true
 					end
 					self.object:remove()
+					def.owner = self.meta.owner
 					tnt.boom(pos, def)
+					def.owner = nil
 					def.in_water = false
 				else
 					if t == nil then
@@ -758,7 +782,7 @@ function tnt.register_tnt(def)
 							(minetest.get_item_group(node.name, "float") == 0 or
 							bcd.liquidtype == "none")) or bcn == nil then
 						local obj = minetest.env:add_entity(pos, name .. "_flying")
-						obj:get_luaentity().meta = {time = mtime}
+						obj:get_luaentity().meta = {time = mtime, owner = meta:get_string("owner")}
 						obj:setacceleration({x = 0, y = -10, z = 0})
 						minetest.remove_node(pos)
 						return

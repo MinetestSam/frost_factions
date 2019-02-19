@@ -1435,10 +1435,10 @@ factions.register_command("stats", {
         local f = args.factions[1]
 		local pps = 0
 		if factions_config.enable_power_per_player then
-			if factions.onlineplayers[faction.name] == nil then
-				factions.onlineplayers[faction.name] = {}
+			if factions.onlineplayers[f.name] == nil then
+				factions.onlineplayers[f.name] = {}
 			end
-			local t = factions.onlineplayers[faction.name]
+			local t = factions.onlineplayers[f.name]
 			local count = 0
 			for _ in pairs(t) do count = count + 1 end
 			pps = factions_config.power_per_player * count
