@@ -1,6 +1,6 @@
 players_glitching = {}
 
-local timeout = 0.3
+local timeout = 1.0
 
 local function step()
 	for _, player in pairs(minetest.get_connected_players()) do
