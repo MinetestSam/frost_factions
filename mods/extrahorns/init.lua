@@ -159,3 +159,27 @@ minetest.register_craft ({
 		{ "group:wood", "group:wood", "group:wood"},
 	}
 })	
+
+-- triangle
+
+minetest.register_craftitem ("extrahorns:triangle", {
+	description = "Triangle",
+	inventory_image = "extrahorns_triangle.png",
+	groups = {instrument=1},	
+	on_use = function (itemstack, user)
+		minetest.sound_play ("extrahorns_triangle", {
+			pos = user:get_pos(),
+			max_hear_distance = 100,
+			gain = 1,
+		})
+	end,
+})
+
+minetest.register_craft ({
+	output = "extrahorns:triangle",
+	recipe = {
+		{ "", "", ""},
+		{ "", "default:steel_ingot", ""},
+		{ "default:steel_ingot", "default:steel_ingot", "default:steel_ingot"},
+	}
+})	

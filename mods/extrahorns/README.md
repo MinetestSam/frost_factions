@@ -13,3 +13,5 @@ the sound for the flutes were made by asworld33 also known as josiah_wi#9288 on 
 the textures for the wardrum were made by archfan also known as archfan7411#0774 on discord
 
 the sound for the wardrum is from https://freesound.org/people/Taira%20Komori/sounds/213319/
+
+the sound for the triangle is available at https://www.freesfx.co.uk/sfx/triangle
