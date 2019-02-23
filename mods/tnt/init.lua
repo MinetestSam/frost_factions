@@ -282,12 +282,12 @@ end
 local function tnt_explode(pos, radius, ignore_protection, ignore_on_blast, owner, explode_center, in_water)
 	pos = vector.round(pos)
 	-- scan for adjacent TNT nodes first, and enlarge the explosion
-	local vm1 = VoxelManip()
+	--local vm1 = VoxelManip()
 	local p1 = vector.subtract(pos, 2)
 	local p2 = vector.add(pos, 2)
-	local minp, maxp = vm1:read_from_map(p1, p2)
-	local a = VoxelArea:new({MinEdge = minp, MaxEdge = maxp})
-	local data = vm1:get_data()
+	--local minp, maxp = vm1:read_from_map(p1, p2)
+	--local a = VoxelArea:new({MinEdge = minp, MaxEdge = maxp})
+	--local data = vm1:get_data()
 	local count = 0
 	local c_tnt = minetest.get_content_id("tnt:tnt")
 	local c_tnt_burning = minetest.get_content_id("tnt:tnt_burning")
@@ -318,10 +318,10 @@ local function tnt_explode(pos, radius, ignore_protection, ignore_on_blast, owne
 	end
 	
 	-- make sure we still have explosion even when centre node isnt tnt related
-	if explode_center then
+	--if explode_center then
 		count = 1
-	end
-
+	--end
+	--[[
 	for z = pos.z - 2, pos.z + 2 do
 		for y = pos.y - 2, pos.y + 2 do
 			local vi = a:index(pos.x - 2, y, z)
@@ -335,9 +335,10 @@ local function tnt_explode(pos, radius, ignore_protection, ignore_on_blast, owne
 			end
 		end
 	end
+	--]]
 
-	vm1:set_data(data)
-	vm1:write_to_map()
+	--vm1:set_data(data)
+	--vm1:write_to_map()
 
 	-- recalculate new radius
 	radius = math.floor(radius * math.pow(count, 1/3))
@@ -450,6 +451,12 @@ minetest.register_node("tnt:boom", {
 	groups = {dig_immediate = 3},
 	-- unaffected by explosions
 	on_blast = function() end,
+	on_construct = function(pos)
+		minetest.get_node_timer(pos):start(3)
+	end,
+	on_timer = function(pos, elapsed)
+		minetest.remove_node(pos)
+	end,
 })
 
 minetest.register_node("tnt:gunpowder", {
@@ -636,10 +643,17 @@ function tnt.register_tnt(def)
 						minetest.pos_to_string(pos))
 				end
 			end,
-			on_blast = function(pos, intensity)
-				minetest.after(0.1, function()
-					tnt.boom(pos, def)
-				end)
+			on_blast = function(pos, intensity, blaster)
+				minetest.remove_node(pos)
+				
+				local dist = math.max(1.0, vector.distance(blaster, pos))
+				local dir = vector.normalize(vector.subtract(pos, blaster))
+				local moveoff = vector.multiply(dir, intensity / dist)
+				
+				local obj = minetest.env:add_entity(pos, name .. "_flying")
+				obj:get_luaentity().meta = {time = 4}
+				obj:setvelocity(moveoff)
+				obj:setacceleration({x = 0, y = -10, z = 0})
 			end,
 			mesecons = {effector =
 				{action_on =
@@ -672,7 +686,7 @@ function tnt.register_tnt(def)
 		textures = {
 			name .. "_burning"
 		},
-		timer = 0,
+		timer = -1,
 		bomb_timer = 0,
 		visual = "wielditem",
 		visual_size = {x = 0.667, y = 0.667},
