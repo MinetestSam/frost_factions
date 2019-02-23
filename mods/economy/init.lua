@@ -100,7 +100,6 @@ economy.itemprices_pr={
 	["farming:rhubarb"] = 2,
 	["farming:tomato"] = 2,
 	["spawners_mobs:mobs_chicken_spawner"] = 10300,
-	["spawners_mobs:mobs_dirt_monster_spawner"] = 12500,
 	["spawners_mobs:mobs_cow_spawner"] = 10600,
 	["spawners_mobs:mobs_oerkki_spawner"] = 900000,
 	["spawners_mobs:mobs_pumba_spawner"] = 10000,
@@ -132,6 +131,12 @@ economy.itemprices_pr={
 	["mobs:pork_cooked"] = 24,
 	["mobs:rat_cooked"] = 13,
 	["farming:string"] = 3,
+	["flowers:rose"] = 3,
+	["flowers:tulip"] = 3,
+	["flowers:dandelion_yellow"] = 3,
+	["flowers:geranium"] = 3,
+	["flowers:viola"] = 3,
+	["flowers:dandelion_white"] = 3,
 }
 
 economy.itemprices={}
