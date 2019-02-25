@@ -180,7 +180,7 @@ function cloaking.uncloak(player)
 
     player:set_properties({visual_size = {x = 1, y = 1},
         collisionbox = {-0.25,-0.85,-0.25,0.25,0.85,0.25}})
-    player:set_nametag_attributes({text = victim})
+    --player:set_nametag_attributes({text = victim})
 
     cloaked_players[victim] = nil
 
