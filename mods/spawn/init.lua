@@ -20,9 +20,21 @@ minetest.register_chatcommand("spawn", {
 			return false, "Your already being teleported!"
 		end
 		local player = minetest.get_player_by_name(name)
+		
+		minetest.after(4.5, function(player)
+			player:set_properties({visual_size = {x = 0, y = 0}, collisionbox = {0,0,0,0,0,0}})
+			player:set_nametag_attributes({text = " "})
+			remove_tag(player)
+		end, player)
+		
 		minetest.after(5, function(player, name) 
 			if player and tip[name] then
 				player:set_pos(spawnpos) 
+				minetest.after(1, function(player) 
+					player:set_properties({visual_size = {x = 1, y = 1},
+					collisionbox = {-0.25,-0.85,-0.25,0.25,0.85,0.25}})
+					create_tag(player)
+				end, player)
 			end
 			tip[name] = nil
 		end, player, name)

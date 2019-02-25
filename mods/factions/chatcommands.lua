@@ -1148,9 +1148,22 @@ if factions_config.spawn_teleport == true then
 				return false
 			end
 				minetest.chat_send_player(player, "Teleporting in five seconds.")
+				minetest.after(4.5, function(player)
+					player:set_properties({visual_size = {x = 0, y = 0}, collisionbox = {0,0,0,0,0,0}})
+					player:set_nametag_attributes({text = " "})
+					remove_tag(player)
+				end, player)
+				
 				minetest.after(5, 
 					function(faction, player)
 						factions.tp_spawn(faction.name, player)
+						
+						minetest.after(1, function(player) 
+							player:set_properties({visual_size = {x = 1, y = 1},
+							collisionbox = {-0.25,-0.85,-0.25,0.25,0.85,0.25}})
+							create_tag(player)
+						end, player)
+						
 						tip[player] = nil
 					end, faction, player)
 				tip[player] = true

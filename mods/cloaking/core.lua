@@ -273,3 +273,22 @@ minetest.register_on_player_hpchange(function(player, hp_change)
     end
     return hp_change
 end, true)
+
+minetest.register_on_dieplayer(
+	function(player)
+		player:set_properties({visual_size = {x = 0, y = 0}, collisionbox = {0,0,0,0,0,0}})
+		player:set_nametag_attributes({text = " "})
+		remove_tag(player)
+		return true
+	end
+)
+
+minetest.register_on_respawnplayer(
+    function(player)
+		minetest.after(1, function(player) 
+			player:set_properties({visual_size = {x = 1, y = 1},
+			collisionbox = {-0.25,-0.85,-0.25,0.25,0.85,0.25}})
+			create_tag(player)
+		end, player)
+    end
+)

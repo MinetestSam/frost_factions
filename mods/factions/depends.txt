@@ -4,3 +4,4 @@ spawn
 xdecor?
 colddb
 ts_doors?
+playertags

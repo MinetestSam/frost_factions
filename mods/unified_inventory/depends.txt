@@ -6,3 +6,4 @@ datastorage?
 farming?
 extended_api
 colddb
+playertags
