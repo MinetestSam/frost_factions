@@ -37,6 +37,7 @@ reach = 1,
 	runaway = true,
 	jump = false,
 	drops = {
+		{name = "mobs:meat_raw", chance = 1, min = 1, max = 1},
 		{name = "farming:string", chance = 1, min = 1, max = 1},
 	},
 	water_damage = 1,
