@@ -58,7 +58,7 @@ mobs:spawn({
 	name = "mobs_monster:stone_monster",
 	nodes = {"default:stone", "default:desert_stone", "default:sandstone"},
 	max_light = 7,
-	chance = 7000,
+	chance = 9000,
 	max_height = 0,
 })
 

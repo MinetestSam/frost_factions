@@ -136,7 +136,7 @@ mobs:register_mob("spawners_mobs:mummy", mummy_def)
 mobs:spawn({
 	name = "spawners_mobs:mummy",
 	nodes = {"default:desert_sand", "default:sand"},
-	chance = 7000,
+	chance = 9000,
 	min_light = 0,
 	max_light = 14,
 	active_object_count = 1,

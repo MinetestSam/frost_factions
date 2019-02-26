@@ -64,7 +64,7 @@ mobs:spawn({
 	name = "mobs_monster:oerkki",
 	nodes = {"default:stone"},
 	max_light = 7,
-	chance = 7000,
+	chance = 9000,
 	max_height = -10,
 })
 

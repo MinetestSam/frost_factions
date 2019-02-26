@@ -65,7 +65,7 @@ mobs:spawn({
 	name = "mobs_monster:tree_monster",
 	nodes = {"default:leaves", "default:jungleleaves"},
 	max_light = 7,
-	chance = 7000,
+	chance = 9000,
 	min_height = 0,
 	day_toggle = false,
 })

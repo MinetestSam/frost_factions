@@ -66,7 +66,7 @@ mobs:spawn({
 	name = "mobs_monster:dungeon_master",
 	nodes = {"default:stone"},
 	max_light = 5,
-	chance = 9000,
+	chance = 11000,
 	active_object_count = 1,
 	max_height = -70,
 })

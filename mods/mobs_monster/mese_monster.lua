@@ -60,7 +60,7 @@ mobs:spawn({
 	name = "mobs_monster:mese_monster",
 	nodes = {"default:stone"},
 	max_light = 7,
-	chance = 5000,
+	chance = 7000,
 	active_object_count = 1,
 	max_height = -20,
 })
