@@ -15,7 +15,7 @@ minetest.register_craftitem("factions_bandages:bandage", {
 	end
 	local pname = object:get_player_name()
 	local name = player:get_player_name()
-	if factions.get_player_faction(name) == factions.get_player_faction(name) then
+	if factions.get_player_faction(pname) == factions.get_player_faction(name) then
 			local hp = object:get_hp()
 			if hp > 0 and hp < healing_limit then
 				hp = hp + math.random(3,4)
