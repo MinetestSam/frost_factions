@@ -792,6 +792,8 @@ minetest.register_node("default:pine_needles",{
 	paramtype = "light",
 	is_ground_content = false,
 	groups = {snappy = 3, leafdecay = 3, flammable = 2, leaves = 1},
+	walkable = false,
+	climbable = true,
 	drop = {
 		max_items = 1,
 		items = {
